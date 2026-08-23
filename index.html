@@ -24,16 +24,16 @@
         })();
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Manrope', sans-serif; -webkit-tap-highlight-color: transparent; }
-        /* Premium/elegant pairing: Outfit for display text (logo, headings,
-           prices, stat numbers, names) - it has more geometric character at
-           larger sizes - while Manrope stays the workhorse body/UI font. */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+        /* Mograph-style: a single clean, rounded geometric sans (Poppins)
+           used everywhere - body text, headings, display numbers - for a
+           minimal, consistent brand look instead of a two-font pairing. */
         .logo, .title-header, .stat-box p, .profile-hero-name, .vip-stat b,
         .lb-amount, .pc-price, h1, h2, h3, h4,
         .game-card-name, .detail-grid-item b, .mini-profile-info span,
         .id-result-name, .google-account-details span, .vip-card-head h4 {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         /* ===================== THEME TOKENS ===================== */
@@ -85,6 +85,22 @@
             --blur: blur(16px) saturate(180%);
             color-scheme: dark;
         }
+        /* Dark-mode recolors for elements that were designed as light pastel
+           tints (badges, focus states, status cards). Without these they show
+           up as stray near-white blocks on the dark navy surface. */
+        html[data-theme="dark"] .history-card:active { background: rgba(76,147,255,0.1); border-color: rgba(76,147,255,0.35); }
+        html[data-theme="dark"] .badge-warning { background: rgba(255,193,7,0.16); color: #FFCA5C; }
+        html[data-theme="dark"] .badge-danger { background: rgba(239,68,68,0.16); color: #FF8A8A; }
+        html[data-theme="dark"] .id-fail-card { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.35); color: #FF9B9B; }
+        html[data-theme="dark"] .success-check { background: rgba(34,197,94,0.16); }
+        html[data-theme="dark"] .wallet-topup-row-icon.st-pending { background: rgba(255,193,7,0.16); color: #FFCA5C; }
+        html[data-theme="dark"] .wallet-topup-row-icon.st-rejected { background: rgba(239,68,68,0.16); color: #FF8A8A; }
+        html[data-theme="dark"] .wallet-topup-row-icon.st-completed { background: rgba(34,197,94,0.16); color: #4ADE80; }
+        html[data-theme="dark"] .mini-profile-bar:active { background: rgba(76,147,255,0.1); }
+        html[data-theme="dark"] .lb-you-row { background: rgba(76,147,255,0.1); }
+        html[data-theme="dark"] .detail-form-card input[type="text"]:focus,
+        html[data-theme="dark"] .profile-edit-field input[type="text"]:focus,
+        html[data-theme="dark"] .wallet-topup-amount-input:focus { background: rgba(76,147,255,0.1); }
         html, body { transition: background-color 0.35s ease, color 0.35s ease; }
         body { background-color: var(--bg); background-image: var(--bg-gradient); background-attachment: fixed; color: var(--text); padding-bottom: 96px; }
 
@@ -143,7 +159,7 @@
         
         /* Header */
         .header { background-color: var(--surface); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .logo { color: var(--accent); font-size: 24px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .logo { color: var(--accent); font-size: 24px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
         .logo-icon-wrap { width: 28px; height: 28px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
         .logo-icon-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; display: block; }
         .header-icon {
@@ -163,13 +179,13 @@
         }
         .notif-dot.show { display: block; animation: notifPulse 1.8s ease-in-out infinite; }
         @keyframes notifPulse { 0%, 100% { box-shadow: 0 0 0 2px rgba(229,57,53,0.25); } 50% { box-shadow: 0 0 0 6px rgba(229,57,53,0); } }
-        .admin-status-bar { display: flex; align-items: center; gap: 6px; padding: 6px 20px; font-size: 12px; font-weight: 600; color: var(--text-secondary); background: var(--bg); }
+        .admin-status-bar { display: flex; align-items: center; gap: 6px; padding: 6px 20px; font-size: 12px; font-weight: 500; color: var(--text-secondary); background: var(--bg); }
         .admin-status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); flex-shrink: 0; }
         .admin-status-dot.online { background: #31A24C; box-shadow: 0 0 0 3px rgba(49,162,76,0.15); }
         .admin-status-dot.offline { background: var(--text-muted); }
         .admin-status-bar.online-text #admin-status-text { color: #31A24C; }
         .notif-item { background: var(--surface); padding: 14px; border-radius: 10px; margin-bottom: 10px; border: 1px solid var(--border); }
-        .notif-item h5 { font-size: 15px; color: var(--text); margin-bottom: 4px; font-weight: 600; }
+        .notif-item h5 { font-size: 15px; color: var(--text); margin-bottom: 4px; font-weight: 500; }
         .notif-item p { font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
         .notif-item span { font-size: 11px; color: var(--text-muted); }
         
@@ -194,7 +210,7 @@
             background: var(--accent);
             color: var(--on-color);
             font-size: 8.5px;
-            font-weight: 700;
+            font-weight: 600;
             letter-spacing: 0.3px;
             padding: 0 8px;
         }
@@ -216,32 +232,59 @@
         .page-section { display: none; animation: fadeIn 0.3s ease-in-out; }
         .page-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        .title-header { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .title-header { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
         
         /* Cards & Lists */
         .cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+        /* Wider screens (tablet/desktop/laptop): the phone-style 2-up grid would
+           blow each card up to half the browser width, so switch to a proper
+           multi-column tile grid there instead — mobile stays untouched at 2/row. */
+        @media (min-width: 700px) {
+            .cards-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 16px; }
+        }
         html { scroll-behavior: smooth; }
         body { -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; }
         /* Cards render on their own compositor layer so scroll-drag doesn't
            repaint/reflow the grid every frame, and the tap-scale only fires
            on a real tap (not a finger dragging across the card while scrolling). */
-        .game-card { cursor: pointer; transition: transform 0.1s; will-change: transform; }
+        .game-card { cursor: pointer; transition: transform 0.1s; will-change: transform; border-radius: 14px; overflow: hidden; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         .game-card:active { transform: scale(0.97); }
         @media (hover: none) and (pointer: coarse) {
             .game-card:active { transition-delay: 80ms; }
         }
-        .game-card-img-wrap { position: relative; aspect-ratio: 1 / 1; border-radius: 14px; overflow: hidden; background: var(--border); border: 1px solid var(--border); }
+        .game-card-img-wrap { position: relative; aspect-ratio: 1 / 1; background: var(--border); }
         .game-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .game-card-name { margin: 8px 0 0; padding: 7px 6px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); color: var(--text); font-size: 13px; font-weight: 700; text-align: center; line-height: 1.25; }
+        .game-card-name { margin: 0; padding: 7px 6px; background: transparent; border: none; border-top: 1px solid var(--border); box-shadow: none; color: var(--text); font-size: 13px; font-weight: 600; text-align: center; line-height: 1.25; }
+
+        /* Entrance motion for game/order cards: each card fades + rises + settles
+           into place with a slight overshoot, staggered card-by-card so the whole
+           grid feels like it "unrolls" in whenever it appears (on load, category
+           switch, search, or scroll) instead of popping in flat. */
+        /* Cards start hidden and only play the entrance keyframe once the
+           scroll-reveal observer (see revealCardsIn() in JS) marks them
+           ".in-view" - i.e. as the user actually drags the page up/down and
+           each card scrolls into the viewport, rather than all firing at once
+           on render. Cards already on-screen at render time reveal almost
+           immediately (staggered by the existing per-card animation-delay). */
+        .game-card-anim { opacity: 0; }
+        .game-card-anim.in-view { animation: gameCardIn 0.32s cubic-bezier(.22,1.12,.36,1) both; }
+        @keyframes gameCardIn {
+            0%   { opacity: 0; transform: translateY(12px) scale(0.95); }
+            60%  { opacity: 1; transform: translateY(-1px) scale(1.01); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .game-card-anim, .game-card-anim.in-view { animation: none; opacity: 1; }
+        }
 
         /* Skeleton loading placeholders — shown instead of "Loading..." text while
            games/packages/history are being fetched, so the layout doesn't jump once
            real content arrives. */
         @keyframes skeletonShimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
         .skel { background: linear-gradient(90deg, var(--border) 25%, #EDEFF2 37%, var(--border) 63%); background-size: 400% 100%; animation: skeletonShimmer 1.4s ease-in-out infinite; }
-        .skel-game-card { display: block; }
-        .skel-game-card .skel-img { aspect-ratio: 1 / 1; border-radius: 14px; }
-        .skel-game-card .skel-name { height: 30px; border-radius: 8px; margin-top: 8px; }
+        .skel-game-card { display: block; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
+        .skel-game-card .skel-img { aspect-ratio: 1 / 1; }
+        .skel-game-card .skel-name { height: 30px; margin-top: 0; }
         /* History list skeleton — mirrors .list-card/.history-card layout */
         .skel-history-card { background: var(--surface); padding: 15px; border-radius: 10px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); }
         .skel-history-card .skel-hc-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
@@ -254,7 +297,7 @@
         .skel-history-card .skel-line4 { height: 18px; width: 60px; border-radius: 20px; }
 
         /* Small colored category pill overlaid on the game's cover image */
-        .game-cat-badge { position: absolute; top: 6px; left: 6px; display: flex; align-items: center; gap: 3px; padding: 3px 8px 3px 6px; border-radius: 9px; font-size: 9.5px; font-weight: 700; color: var(--on-color); box-shadow: 0 2px 6px rgba(0,0,0,0.25); }
+        .game-cat-badge { position: absolute; top: 6px; left: 6px; display: flex; align-items: center; gap: 3px; padding: 3px 8px 3px 6px; border-radius: 9px; font-size: 9.5px; font-weight: 600; color: var(--on-color); box-shadow: 0 2px 6px rgba(0,0,0,0.25); }
         .game-cat-badge svg { width: 10px; height: 10px; }
 
         /* Category filter chips row, above the All Games grid */
@@ -278,8 +321,8 @@
         .game-search-clear:active { background: var(--surface-alt); }
         .cat-filter-chip {
             display: flex; align-items: center; gap: 6px; flex: 0 0 auto; padding: 9px 15px 9px 11px; border-radius: 20px;
-            background: rgba(255,255,255,0.9); border: 1.5px solid var(--border);
-            color: var(--text-secondary); font-size: 13px; font-weight: 700; cursor: pointer; user-select: none;
+            background: var(--surface); border: 1.5px solid var(--border);
+            color: var(--text-secondary); font-size: 13px; font-weight: 600; cursor: pointer; user-select: none;
             transition: transform 0.12s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
         }
         .cat-filter-chip svg { width: 15px; height: 15px; opacity: 0.8; }
@@ -295,7 +338,7 @@
         .popular-card .game-card-img-wrap { width: 108px; height: 108px; }
         .popular-card .game-card-name { font-size: 12px; padding: 6px 5px; }
         .card-body { padding: 15px; }
-        .card-body h4 { font-size: 16px; font-weight: 600; margin-bottom: 10px; color: var(--text); }
+        .card-body h4 { font-size: 16px; font-weight: 500; margin-bottom: 10px; color: var(--text); }
         
         .list-card { background: var(--surface); padding: 15px; border-radius: 10px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         .history-card { cursor: pointer; transition: 0.12s; }
@@ -306,21 +349,21 @@
         .hc-right { display: flex; align-items: center; gap: 10px; }
         .hc-chevron { color: var(--text-faint); flex-shrink: 0; width: 18px; height: 18px; }
         .list-info { min-width: 0; }
-        .list-info h5 { font-size: 15px; color: var(--text); margin-bottom: 4px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .list-info h5 { font-size: 15px; color: var(--text); margin-bottom: 4px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .list-info p { font-size: 13px; color: var(--text-secondary); }
-        .hc-success-time { display: flex; align-items: center; gap: 3px; font-size: 11.5px !important; color: #1E8E4F !important; font-weight: 600; margin-top: 2px; }
+        .hc-success-time { display: flex; align-items: center; gap: 3px; font-size: 11.5px !important; color: #1E8E4F !important; font-weight: 500; margin-top: 2px; }
         .hc-success-time svg { width: 11px; height: 11px; stroke: #1E8E4F; }
         .hc-order-id { font-size: 11px !important; color: var(--text-muted) !important; font-family: monospace; margin-top: 1px; }
         .list-amount { text-align: right; }
-        .list-amount h5 { font-size: 15px; color: var(--text); margin-bottom: 4px; font-weight: 600; }
+        .list-amount h5 { font-size: 15px; color: var(--text); margin-bottom: 4px; font-weight: 500; }
         
         /* Order History: date filter chips + day-group headers (Yangon time) */
         .history-date-filter-wrap { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 12px; -webkit-overflow-scrolling: touch; }
         .history-date-filter-wrap::-webkit-scrollbar { display: none; }
-        .history-date-chip { flex: 0 0 auto; padding: 7px 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); color: var(--text-secondary); font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.12s; }
+        .history-date-chip { flex: 0 0 auto; padding: 7px 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); color: var(--text-secondary); font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; transition: 0.12s; }
         .history-date-chip:active { transform: scale(0.96); }
         .history-date-chip.active { background: var(--accent); border-color: var(--accent); color: var(--on-color); }
-        .history-date-header { font-size: 13px; font-weight: 700; color: var(--text-secondary); margin: 16px 2px 8px; }
+        .history-date-header { font-size: 13px; font-weight: 600; color: var(--text-secondary); margin: 16px 2px 8px; }
         .history-date-header:first-of-type { margin-top: 2px; }
 
         .badge { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; }
@@ -334,7 +377,7 @@
         @keyframes statusPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.55); } }
         .status-anim-spin { display: inline-block; width: 9px; height: 9px; margin-right: 5px; border: 2px solid #C7CCE0; border-top-color: #405DE6; border-radius: 50%; animation: statusSpin 0.7s linear infinite; }
         @keyframes statusSpin { to { transform: rotate(360deg); } }
-        .status-anim-check { display: inline-block; margin-right: 3px; font-weight: 900; animation: statusPop 0.35s ease; }
+        .status-anim-check { display: inline-block; margin-right: 3px; font-weight: 800; animation: statusPop 0.35s ease; }
         @keyframes statusPop { 0% { transform: scale(0); } 60% { transform: scale(1.3); } 100% { transform: scale(1); } }
 
         /* ===================== ORDER STATUS TIMELINE =====================
@@ -346,7 +389,7 @@
         .ot-dot {
             width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
             background: var(--border); color: var(--text-faint); z-index: 2; border: 2px solid var(--surface);
-            font-size: 12px; font-weight: 700; flex-shrink: 0; transition: background 0.25s ease, color 0.25s ease;
+            font-size: 12px; font-weight: 600; flex-shrink: 0; transition: background 0.25s ease, color 0.25s ease;
         }
         .ot-dot svg { width: 13px; height: 13px; }
         .ot-dot.done { background: #1E8E4F; color: #fff; }
@@ -356,7 +399,7 @@
         .ot-line.done { background: #1E8E4F; }
         .ot-line.fail { background: #D93025; }
         .ot-step:first-child .ot-line { display: none; }
-        .ot-label { font-size: 10.5px; font-weight: 600; color: var(--text-muted); margin-top: 6px; }
+        .ot-label { font-size: 10.5px; font-weight: 500; color: var(--text-muted); margin-top: 6px; }
         .ot-label.done, .ot-label.active, .ot-label.fail { color: var(--text); }
         .ot-time { font-size: 9px; color: var(--text-faint); margin-top: 1px; }
 
@@ -373,14 +416,49 @@
 
         .od-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--bg); font-size: 13px; }
         .od-row span { color: var(--text-secondary); }
-        .od-row b { color: var(--text); font-weight: 600; text-align: right; }
+        .od-row b { color: var(--text); font-weight: 500; text-align: right; }
         .od-row:last-of-type { border-bottom: none; }
+
+        /* Prominent "your voucher code" card — shown at the very top of the
+           Success screen and the Order Detail modal once a voucher/giftcard
+           order delivers its code(s), so the customer can't miss it. */
+        .voucher-code-highlight {
+            background: linear-gradient(135deg, #FFF6DC, #FFE9AE);
+            border: 1.5px solid #F0C551;
+            border-radius: 16px;
+            padding: 14px 14px 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 14px rgba(207, 160, 34, 0.18);
+        }
+        html[data-theme="dark"] .voucher-code-highlight {
+            background: linear-gradient(135deg, #3A2F0F, #4A3A10);
+            border-color: #7A5B00;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+        }
+        html[data-theme="dark"] .voucher-code-highlight .vch-label,
+        html[data-theme="dark"] .voucher-code-highlight .vch-code { color: #FFD976 !important; }
+        html[data-theme="dark"] .voucher-code-highlight .vch-row { background: rgba(255,255,255,0.06) !important; }
+        .voucher-copy-btn {
+            flex-shrink: 0;
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            border: none;
+            background: #F0C551;
+            color: #5C4400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.12s ease;
+        }
+        .voucher-copy-btn:active { transform: scale(0.92); }
         .stat-box { background: var(--surface); padding: 20px; border-radius: 10px; text-align: center; border: 1px solid var(--border); border-left: 5px solid var(--accent); box-shadow: 0 1px 2px rgba(0,0,0,0.05); margin-bottom: 15px;}
-        .stat-box p { font-size: 28px; font-weight: 700; color: var(--text); margin: 8px 0 15px 0; }
+        .stat-box p { font-size: 28px; font-weight: 600; color: var(--text); margin: 8px 0 15px 0; }
 
         /* VIP tier badges — colors are set per-tier via inline style from JS,
            this class just supplies the shared chip shape. */
-        .tier-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 11px 4px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+        .tier-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 11px 4px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; white-space: nowrap; }
         .tier-badge svg { width: 12px; height: 12px; }
         .mini-profile-info .tier-badge { margin-top: 3px; }
 
@@ -388,10 +466,10 @@
         .avatar-upload-box.has-tier-ring { box-shadow: 0 0 0 3px var(--tier-color, var(--border)); }
         .vip-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-top: 14px; }
         .vip-card-head { display: flex; align-items: center; justify-content: space-between; }
-        .vip-card-head h4 { font-size: 15px; font-weight: 700; color: var(--text); }
+        .vip-card-head h4 { font-size: 15px; font-weight: 600; color: var(--text); }
         .vip-stats-row { display: flex; gap: 10px; margin-top: 14px; }
         .vip-stat { flex: 1; text-align: center; background: var(--surface-alt); border-radius: 10px; padding: 10px 4px; }
-        .vip-stat b { display: block; font-size: 15px; font-weight: 700; color: var(--text); }
+        .vip-stat b { display: block; font-size: 15px; font-weight: 600; color: var(--text); }
         .vip-stat span { font-size: 11px; color: var(--text-muted); }
         .vip-progress-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary); margin-top: 14px; margin-bottom: 6px; }
         .vip-progress-track { height: 8px; background: var(--bg); border-radius: 6px; overflow: hidden; }
@@ -400,15 +478,15 @@
         /* Leaderboard rows */
         .lb-row { display: flex; align-items: center; gap: 12px; padding: 12px 4px; border-bottom: 1px solid var(--bg); }
         .lb-row:last-child { border-bottom: none; }
-        .lb-rank { width: 26px; flex-shrink: 0; text-align: center; font-size: 14px; font-weight: 800; color: var(--text-muted); }
+        .lb-rank { width: 26px; flex-shrink: 0; text-align: center; font-size: 14px; font-weight: 700; color: var(--text-muted); }
         .lb-rank.lb-rank-1 { color: #D4A017; }
         .lb-rank.lb-rank-2 { color: #8E9AAF; }
         .lb-rank.lb-rank-3 { color: #A9673A; }
-        .lb-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700; font-size: 15px; overflow: hidden; }
+        .lb-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 600; font-size: 15px; overflow: hidden; }
         .lb-avatar img { width: 100%; height: 100%; object-fit: cover; }
         .lb-info { flex: 1; min-width: 0; }
-        .lb-info .lb-name { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .lb-amount { text-align: right; font-size: 13px; font-weight: 700; color: var(--text); flex-shrink: 0; }
+        .lb-info .lb-name { font-size: 14px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .lb-amount { text-align: right; font-size: 13px; font-weight: 600; color: var(--text); flex-shrink: 0; }
         .lb-you-row { background: #F8FBFF; border-radius: 10px; margin-top: 6px; border: 1px dashed var(--accent); padding: 12px; }
 
         /* Top-3 podium — the #1/#2/#3 spenders get an elevated card layout
@@ -418,22 +496,22 @@
         .lb-podium-slot.rank-1 { order: 2; padding-top: 22px; padding-bottom: 18px; background: linear-gradient(180deg, rgba(212,160,23,0.14), var(--surface) 55%); border-color: rgba(212,160,23,0.45); }
         .lb-podium-slot.rank-2 { order: 1; background: linear-gradient(180deg, rgba(142,154,175,0.14), var(--surface) 55%); border-color: rgba(142,154,175,0.4); }
         .lb-podium-slot.rank-3 { order: 3; background: linear-gradient(180deg, rgba(169,103,58,0.14), var(--surface) 55%); border-color: rgba(169,103,58,0.4); }
-        .lb-podium-medal { position: absolute; top: -12px; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
+        .lb-podium-medal { position: absolute; top: -12px; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
         .lb-podium-slot.rank-1 .lb-podium-medal { background: linear-gradient(135deg, #F4D06F, #D4A017); }
         .lb-podium-slot.rank-2 .lb-podium-medal { background: linear-gradient(135deg, #C7CFDA, #8E9AAF); }
         .lb-podium-slot.rank-3 .lb-podium-medal { background: linear-gradient(135deg, #C98B5E, #A9673A); }
-        .lb-podium-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px; overflow: hidden; border: 3px solid var(--surface); box-shadow: 0 0 0 2px currentColor; }
+        .lb-podium-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 20px; overflow: hidden; border: 3px solid var(--surface); box-shadow: 0 0 0 2px currentColor; }
         .lb-podium-slot.rank-1 .lb-podium-avatar { width: 68px; height: 68px; font-size: 24px; }
         .lb-podium-slot.rank-1 .lb-podium-avatar { color: #D4A017; }
         .lb-podium-slot.rank-2 .lb-podium-avatar { color: #8E9AAF; }
         .lb-podium-slot.rank-3 .lb-podium-avatar { color: #A9673A; }
         .lb-podium-avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .lb-podium-name { font-size: 13px; font-weight: 700; color: var(--text); text-align: center; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
-        .lb-podium-amount { font-size: 12.5px; font-weight: 800; color: var(--text-secondary); }
-        .lb-list-heading { font-size: 12px; font-weight: 700; color: var(--text-muted); margin: 2px 4px 6px; }
+        .lb-podium-name { font-size: 13px; font-weight: 600; color: var(--text); text-align: center; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+        .lb-podium-amount { font-size: 12.5px; font-weight: 700; color: var(--text-secondary); }
+        .lb-list-heading { font-size: 12px; font-weight: 600; color: var(--text-muted); margin: 2px 4px 6px; }
 
         /* Buttons & Nav */
-        .btn { width: 100%; padding: 10px; border-radius: 6px; font-weight: 600; font-size: 15px; cursor: pointer; border: none; text-align: center; transition: 0.2s;}
+        .btn { width: 100%; padding: 10px; border-radius: 6px; font-weight: 500; font-size: 15px; cursor: pointer; border: none; text-align: center; transition: 0.2s;}
         .btn-primary { background-color: var(--accent); color: white; }
         .btn-primary:active { background-color: var(--accent-dark); }
         .btn:disabled { opacity: 0.55; cursor: not-allowed; }
@@ -502,16 +580,22 @@
         .slide-confirm-thumb.completed { background: linear-gradient(160deg, #34D399, #16A34A); box-shadow: 0 3px 12px rgba(22,163,74,0.5), inset 0 1px 1px rgba(255,255,255,0.4); }
         .slide-confirm-thumb.completed svg { color: #fff; }
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--surface); display: flex; justify-content: space-around; padding: 8px 0; border-top: 1px solid var(--border); z-index: 100; box-shadow: 0 -2px 5px rgba(0,0,0,0.05); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 11px; font-weight: 600; color: var(--text-secondary); cursor: pointer; width: 20%; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 11px; font-weight: 500; color: var(--text-secondary); cursor: pointer; flex: 1; min-width: 0; }
+        .nav-label { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .nav-item.active { color: var(--accent); }
         .nav-icon-wrap { width: 40px; height: 40px; border-radius: 14px; display: flex; align-items: center; justify-content: center; }
         .nav-item.active .ui-icon { stroke: var(--accent); }
         
-        /* Toast */
-        #toast { position: fixed; top: 14px; left: 14px; right: 14px; max-width: 480px; margin: 0 auto; background: #0F2419; border: 1px solid rgba(74,222,128,0.35); color: #4ADE80; padding: 14px 16px; border-radius: 14px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 12px; transition: all 0.3s ease; z-index: 1000; transform: translateY(-150%); box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+        /* Toast — pastel status card: icon circle, message, dismiss ×.
+           Colors per-type are applied inline by showToast() so light/dark
+           theme both get a tint that reads clearly against their surface. */
+        #toast { position: fixed; top: 14px; left: 14px; right: 14px; max-width: 480px; margin: 0 auto; border: 1px solid transparent; padding: 12px 14px; border-radius: 14px; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 12px; transition: all 0.3s ease; z-index: 1000; transform: translateY(-150%); box-shadow: 0 8px 24px rgba(0,0,0,0.16); }
         #toast.show { transform: translateY(0); }
-        #toast .toast-icon-circle { width: 26px; height: 26px; border-radius: 50%; background: #22C55E; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        #toast .toast-icon-circle svg { width: 15px; height: 15px; }
+        #toast .toast-icon-circle { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        #toast .toast-icon-circle svg { width: 15px; height: 15px; color: #fff; }
+        #toast-msg { flex: 1; line-height: 1.35; }
+        #toast .toast-close { flex-shrink: 0; width: 16px; height: 16px; cursor: pointer; opacity: 0.5; transition: opacity 0.15s ease; color: inherit; }
+        #toast .toast-close:active { opacity: 1; }
         .empty-msg { text-align: center; color: var(--text-secondary); font-size: 14px; padding: 20px 0; }
 
         /* Empty-state illustration — icon-in-circle + title + subtext, used
@@ -521,7 +605,7 @@
         .empty-state { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 44px 24px 36px; gap: 4px; }
         .empty-state-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
         .empty-state-icon svg { width: 28px; height: 28px; stroke: var(--text-muted); }
-        .empty-state-title { font-size: 15px; font-weight: 700; color: var(--text); }
+        .empty-state-title { font-size: 15px; font-weight: 600; color: var(--text); }
         .empty-state-sub { font-size: 13px; color: var(--text-secondary); line-height: 1.45; max-width: 260px; }
         .empty-state-action { margin-top: 14px; }
 
@@ -531,52 +615,143 @@
         .modal-box { background: var(--surface); width: 100%; max-width: 480px; border-radius: 16px 16px 0 0; padding: 20px; max-height: 80vh; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.25s ease; overflow: hidden; }
         .modal-overlay.show .modal-box { transform: translateY(0); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--border); margin-bottom: 14px; flex-shrink: 0; }
-        .modal-header h3 { font-size: 17px; font-weight: 700; color: var(--text); }
+        .modal-header h3 { font-size: 17px; font-weight: 600; color: var(--text); }
         .modal-close { width: 32px; height: 32px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
-        .modal-body { overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 10px; flex: 1 1 auto; min-height: 0; }
+        .modal-body { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; display: flex; flex-direction: column; gap: 10px; flex: 1 1 auto; min-height: 0; }
         /* Package/Currency tab switcher */
         .pkg-type-tabs { display: flex; background: var(--bg); border-radius: 10px; padding: 4px; gap: 4px; margin-bottom: 14px; }
-        .pkg-type-tab { flex: 1; text-align: center; padding: 9px 0; border: none; background: transparent; border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--text-secondary); cursor: pointer; transition: 0.15s; }
+        .pkg-type-tab { flex: 1; text-align: center; padding: 9px 0; border: none; background: transparent; border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--text-secondary); cursor: pointer; transition: 0.15s; }
         .pkg-type-tab.active { background: var(--surface); color: var(--accent); box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
         /* Pay-with (Wallet vs Payment method) tabs — same look as pkg-type-tabs
            but a separate class so the two toggles never fight over which one
            has ".active" when either is re-rendered. */
         .pay-type-tabs { display: flex; background: var(--bg); border-radius: 10px; padding: 4px; gap: 4px; margin-bottom: 14px; }
-        .pay-type-tab { flex: 1; text-align: center; padding: 9px 0; border: none; background: transparent; border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--text-secondary); cursor: pointer; transition: 0.15s; }
+        .pay-type-tab { flex: 1; text-align: center; padding: 9px 0; border: none; background: transparent; border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--text-secondary); cursor: pointer; transition: 0.15s; }
         .pay-type-tab.active { background: var(--surface); color: var(--accent); box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
         .wallet-pay-box .wallet-pay-balance-label { font-size: 12.5px; color: var(--text-secondary); }
-        .wallet-pay-box .wallet-pay-balance-amount { font-size: 20px; font-weight: 800; color: var(--text); margin-top: 2px; }
+        .wallet-pay-box .wallet-pay-balance-amount { font-size: 20px; font-weight: 700; color: var(--text); margin-top: 2px; }
         .wallet-pay-box .wallet-pay-note { font-size: 12.5px; margin-top: 6px; line-height: 1.4; }
         .wallet-pay-box .wallet-pay-note.ok { color: #31A24C; }
         .wallet-pay-box .wallet-pay-note.low { color: #E53935; }
 
         .package-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .package-grid.layout-currency { grid-template-columns: repeat(3, 1fr); gap: 9px; }
+
+        /* Keeps the package grid scrollable inside its own box instead of the
+           whole page — with many packages, the customer used to have to scroll
+           all the way past every tile just to reach payment/confirm below. */
+        .package-grid-scroll {
+            max-height: 48vh; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+            padding: 10px 2px; margin: 0 -2px;
+            border: 1px solid var(--border); border-radius: 16px; background: var(--surface-alt);
+        }
+        .package-grid-scroll::-webkit-scrollbar { width: 4px; }
+        .package-grid-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        .package-grid-scroll .package-grid { padding: 0 8px; }
+
+        /* Same idea for the Order/Transaction History list: the card list
+           scrolls inside its own box instead of dragging the whole page down,
+           while the date-filter chips above it stay put. */
+        .order-list-scroll {
+            max-height: 66vh; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+            border: 1px solid var(--border); border-radius: 16px; background: var(--surface-alt);
+            padding: 10px; margin-top: 4px;
+        }
+        .order-list-scroll::-webkit-scrollbar { width: 4px; }
+        .order-list-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        .order-list-scroll .history-date-header:first-of-type { margin-top: 2px; }
+
+        /* Order/detail page on wider screens: banner shrinks and sits in its
+           own sidebar column instead of stretching full-width, account info +
+           packages + payment move beside it, and the package tiles fall back
+           to an auto-fill grid so they stay a sensible size instead of growing
+           into oversized squares. Mobile (below 700px) is untouched. */
+        .detail-layout { display: block; }
+        @media (min-width: 700px) {
+            .detail-layout { display: grid; grid-template-columns: minmax(220px, 300px) 1fr; gap: 28px; align-items: start; }
+            .detail-banner-col { position: sticky; top: 88px; }
+            #detail-game-banner { margin-bottom: 0; }
+            .package-grid.layout-currency { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
+        }
         .package-card { border: 2px solid var(--border); border-radius: 14px; cursor: pointer; transition: 0.15s; background: var(--surface); overflow: hidden; display: flex; flex-direction: column; }
         .package-card.selected { border-color: var(--accent); }
 
         /* Both Currency and Package types now share this same grid-card look:
            tall card, square image on top, price in its own bottom bar. */
         .package-card.type-currency { border-radius: 11px; }
-        .package-card.type-currency .pc-img-wrap { width: 100%; aspect-ratio: 1 / 1; background: var(--bg); overflow: hidden; }
+        .package-card.type-currency .pc-img-wrap { width: 100%; aspect-ratio: 1 / 1; background: var(--bg); overflow: hidden; position: relative; }
         .package-card.type-currency .pc-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        /* Checkmark badge shown on the currently-selected currency package */
+        .pc-selected-check {
+            position: absolute; top: 6px; right: 6px; width: 20px; height: 20px;
+            border-radius: 50%; background: var(--accent); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            opacity: 0; transform: scale(0.5); transition: opacity 0.15s ease, transform 0.15s ease;
+            pointer-events: none;
+        }
+        .pc-selected-check .ui-icon { width: 12px; height: 12px; stroke-width: 3; }
+        .package-card.selected .pc-selected-check { opacity: 1; transform: scale(1); }
+        /* "X ကျန်" (X left) live-stock badge for voucher packages, opposite
+           corner from the selected-checkmark badge above. */
+        .pc-stock-badge {
+            position: absolute; top: 6px; left: 6px; padding: 2px 6px;
+            border-radius: 8px; background: rgba(255,255,255,0.92);
+            font-size: 9.5px; font-weight: 500; color: #1877F2;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+        }
+        html[data-theme="dark"] .pc-stock-badge { background: rgba(30,32,38,0.85); color: #6FA8FF; }
         .package-card.type-currency .pc-info { padding: 6px 6px 0; text-align: center; }
         .package-card.type-currency .pc-label { font-size: 11px; line-height: 1.2; }
         .package-card.type-currency .pc-price-bar { margin-top: 5px; padding: 5px 6px; }
         .package-card.type-currency .pc-price { font-size: 12px; }
 
         .pc-info { min-width: 0; }
-        .pc-label { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.3; display: block; }
+        .pc-label { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.3; display: block; }
         .pc-price-bar { margin-top: 8px; padding: 8px 10px; border-top: 1px solid var(--border); background: var(--surface-alt); text-align: center; }
         .package-card.selected .pc-price-bar { background: var(--accent-soft); border-top-color: var(--accent); }
-        .pc-price { font-size: 14px; font-weight: 700; color: var(--accent); }
+        .pc-price { font-size: 14px; font-weight: 600; color: var(--accent); }
         .modal-footer { padding-top: 16px; }
         .modal-footer .btn:disabled { background: var(--text-faint); cursor: not-allowed; }
 
+        /* Game Description card — sits below the detail banner, explains
+           the game to the customer. Admin-editable free text, shown with
+           a subtle dot-grid backdrop matching the app's premium cards, and
+           a clamp/expand toggle for longer descriptions. */
+        .game-desc-card {
+            position: relative; overflow: hidden;
+            background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+            padding: 14px 16px 13px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .game-desc-card::before {
+            content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+            background-image: radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px);
+            background-size: 14px 14px;
+            -webkit-mask-image: linear-gradient(to bottom, transparent, #000 60%);
+            mask-image: linear-gradient(to bottom, transparent, #000 60%);
+        }
+        html[data-theme="dark"] .game-desc-card::before { background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px); }
+        .game-desc-head { position: relative; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .game-desc-head-icon {
+            width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+            background: var(--accent-soft); color: var(--accent);
+        }
+        .game-desc-head-icon svg { width: 14px; height: 14px; }
+        .game-desc-head h4 { position: relative; font-size: 13.5px; font-weight: 600; color: var(--text-secondary); margin: 0; }
+        .game-desc-text {
+            position: relative; font-size: 13.5px; line-height: 1.65; color: var(--text); margin: 0; white-space: pre-line;
+            display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .game-desc-text.expanded { -webkit-line-clamp: unset; overflow: visible; }
+        .game-desc-toggle {
+            position: relative; display: inline-block; margin-top: 7px; background: none; border: none; padding: 0;
+            font-size: 12.5px; font-weight: 600; color: var(--accent); cursor: pointer;
+        }
+
         /* Checkout: account info, payment methods, success screen */
-        .detail-section-title { font-size: 14px; font-weight: 700; color: var(--text-secondary); margin: 18px 0 10px; }
+        .detail-section-title { font-size: 14px; font-weight: 600; color: var(--text-secondary); margin: 18px 0 10px; }
         .detail-form-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .detail-form-card label { font-size: 13px; font-weight: 700; color: var(--text); margin-top: 12px; }
+        .detail-form-card label { font-size: 13px; font-weight: 600; color: var(--text); margin-top: 12px; }
         .detail-form-card label:first-child { margin-top: 0; }
         .detail-form-card input[type="text"] { padding: 13px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 15px; margin-top: 6px; transition: 0.15s; width: 100%; }
         .detail-form-card input[type="text"]:focus { outline: none; border-color: var(--accent); background: #F8FBFF; }
@@ -598,7 +773,7 @@
         #order-detail-overlay { align-items: center; padding: 20px; }
         #order-detail-overlay .modal-box { border-radius: 20px; max-height: 88vh; transform: translateY(12px) scale(0.96); opacity: 0; transition: transform 0.22s ease, opacity 0.22s ease; }
         #order-detail-overlay.show .modal-box { transform: translateY(0) scale(1); opacity: 1; }
-        .profile-edit-field label { display: block; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+        .profile-edit-field label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
         .profile-edit-field input[type="text"] { width: 100%; padding: 13px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 15px; transition: 0.15s; }
         .profile-edit-field input[type="text"]:focus { outline: none; border-color: var(--accent); background: #F8FBFF; }
         @media (max-width: 360px) {
@@ -607,15 +782,15 @@
 
         /* Recent IDs: horizontal chip row so switching between previously-used
            In-Game IDs doesn't require retyping */
-        .recent-ids-label { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-top: 12px; }
+        .recent-ids-label { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 12px; }
         .recent-ids-row { display: flex; gap: 8px; overflow-x: auto; padding: 8px 2px 2px; -webkit-overflow-scrolling: touch; }
         .recent-ids-row::-webkit-scrollbar { display: none; }
-        .recent-id-chip { flex: 0 0 auto; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 7px 14px; font-size: 13px; font-weight: 600; color: var(--accent); cursor: pointer; white-space: nowrap; max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
+        .recent-id-chip { flex: 0 0 auto; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 7px 14px; font-size: 13px; font-weight: 500; color: var(--accent); cursor: pointer; white-space: nowrap; max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
         .recent-id-chip:active { background: var(--accent-soft); }
 
         /* Confirm ID button - sits full-width below the ID fields with an
            animated "checking" and "confirmed" state for clear feedback. */
-        .confirm-id-btn { width: 100%; margin-top: 12px; padding: 12px; border: none; border-radius: 10px; background: var(--accent); color: var(--on-color); font-weight: 700; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background-color 0.25s ease, transform 0.15s ease; }
+        .confirm-id-btn { width: 100%; margin-top: 12px; padding: 12px; border: none; border-radius: 10px; background: var(--accent); color: var(--on-color); font-weight: 600; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background-color 0.25s ease, transform 0.15s ease; }
         .confirm-id-btn:active { transform: scale(0.98); }
         .confirm-id-btn:disabled { cursor: default; }
         .confirm-id-btn.checking { background: linear-gradient(90deg, var(--accent) 0%, #5AA0FF 50%, var(--accent) 100%); background-size: 200% 100%; animation: confirmIdShimmer 1.4s linear infinite; }
@@ -628,21 +803,21 @@
 
         /* Resolved player-name display shown after a successful ID check */
         .id-result-card { display: flex; align-items: center; gap: 10px; background: linear-gradient(135deg, #F0FFF4, #E9FBEF); border: 1px solid #BBF7D0; border-radius: 12px; padding: 10px 12px; animation: idResultIn 0.35s ease; }
-        .id-result-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #28a745, #20c997); color: var(--on-color); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; flex-shrink: 0; }
+        .id-result-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #28a745, #20c997); color: var(--on-color); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 15px; flex-shrink: 0; }
         .id-result-info { flex: 1; min-width: 0; }
-        .id-result-name { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .id-result-label { font-size: 11px; color: #28a745; font-weight: 600; margin-top: 1px; }
+        .id-result-name { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .id-result-label { font-size: 11px; color: #28a745; font-weight: 500; margin-top: 1px; }
         .id-result-check { width: 20px; height: 20px; border-radius: 50%; background: #28a745; color: var(--on-color); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 12px; animation: idCheckPop 0.4s ease 0.1s both; }
         @keyframes idResultIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes idCheckPop { 0% { transform: scale(0); } 70% { transform: scale(1.15); } 100% { transform: scale(1); } }
 
-        .id-fail-card { display: flex; align-items: center; gap: 8px; background: #FDF2F2; border: 1px solid #F5C2C2; border-radius: 10px; padding: 9px 12px; font-size: 12.5px; color: #C0392B; font-weight: 600; animation: idResultIn 0.3s ease; }
+        .id-fail-card { display: flex; align-items: center; gap: 8px; background: #FDF2F2; border: 1px solid #F5C2C2; border-radius: 10px; padding: 9px 12px; font-size: 12.5px; color: #C0392B; font-weight: 500; animation: idResultIn 0.3s ease; }
         .id-checking-text { font-size: 12px; color: var(--text-muted); margin: 0; }
         .payment-option { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; transition: 0.15s; background: var(--surface); }
         .payment-option.selected { border-color: var(--accent); background: var(--accent-soft); }
         .payment-option-icon { width: 38px; height: 38px; border-radius: 8px; background: var(--accent); color: var(--on-color); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
         .payment-option-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .payment-option-name { font-size: 14px; font-weight: 600; color: var(--text); }
+        .payment-option-name { font-size: 14px; font-weight: 500; color: var(--text); }
         .pm-copy-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
         .pm-copy-btn { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); cursor: pointer; flex-shrink: 0; transition: 0.15s; border: none; }
         .pm-copy-btn:active { background: var(--accent); color: var(--on-color); transform: scale(0.92); }
@@ -656,10 +831,10 @@
         .upload-shot-box.has-image .upload-shot-label,
         .upload-shot-box.has-image .upload-shot-hint { display: none; }
         .upload-shot-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; }
-        .upload-shot-label { font-size: 13px; font-weight: 600; color: var(--text); }
+        .upload-shot-label { font-size: 13px; font-weight: 500; color: var(--text); }
         .upload-shot-hint { font-size: 11px; color: var(--text-muted); }
         .upload-shot-box img { width: 100%; max-height: 220px; object-fit: contain; background: var(--bg); display: block; }
-        .upload-shot-change { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.65); color: var(--on-color); font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 20px; display: flex; align-items: center; gap: 5px; }
+        .upload-shot-change { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.65); color: var(--on-color); font-size: 12px; font-weight: 500; padding: 6px 12px; border-radius: 20px; display: flex; align-items: center; gap: 5px; }
         .upload-shot-change svg { width: 13px; height: 13px; }
         .success-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
         .success-overlay.show { opacity: 1; pointer-events: auto; }
@@ -667,42 +842,62 @@
         .success-overlay.show .success-box { transform: scale(1); }
         .success-check { width: 72px; height: 72px; border-radius: 50%; background: #E7F8EE; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
 
-        /* ===================== WALLET PAGE — REDESIGN ===================== */
+        /* ===================== WALLET PAGE — PREMIUM REDESIGN ===================== */
         .wallet-balance-card {
-            position: relative; overflow: hidden; border-radius: 26px; padding: 24px 22px 22px;
-            background: linear-gradient(135deg, #0F1E3D 0%, #1B2E5C 45%, #3B2E6B 100%);
-            box-shadow: var(--glass-shadow);
+            position: relative; overflow: hidden; border-radius: 28px; padding: 26px 24px 24px;
+            background: linear-gradient(150deg, #0A1330 0%, #172352 40%, #2C1E5C 72%, #3E2A6E 100%);
+            box-shadow: 0 22px 46px -14px rgba(15,15,50,0.5), 0 1px 0 rgba(255,255,255,0.06) inset;
+            isolation: isolate;
         }
+        .wallet-balance-card::before {
+            content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px; z-index: 3;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.03) 32%, rgba(255,255,255,0.1) 68%, rgba(255,255,255,0.32));
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            pointer-events: none;
+        }
+        .wallet-balance-card::after {
+            content: ''; position: absolute; top: 0; left: -60%; width: 35%; height: 100%; z-index: 1;
+            background: linear-gradient(115deg, transparent, rgba(255,255,255,0.16), transparent);
+            transform: skewX(-18deg); pointer-events: none;
+            animation: walletCardShine 3.4s ease-in-out 0.5s 1;
+        }
+        @keyframes walletCardShine { 0% { left: -60%; } 100% { left: 130%; } }
         .wallet-balance-card-glow {
-            position: absolute; inset: 0;
-            background: radial-gradient(circle at 15% 10%, rgba(76,147,255,0.38), transparent 50%),
-                        radial-gradient(circle at 92% 100%, rgba(236,72,153,0.3), transparent 55%);
+            position: absolute; inset: 0; z-index: 0;
+            background: radial-gradient(circle at 12% 8%, rgba(96,165,255,0.42), transparent 48%),
+                        radial-gradient(circle at 96% 105%, rgba(217,70,239,0.32), transparent 55%),
+                        radial-gradient(circle at 60% -12%, rgba(255,255,255,0.12), transparent 42%);
             pointer-events: none;
         }
         .wallet-balance-pattern {
-            position: absolute; inset: 0; pointer-events: none; opacity: 0.55;
+            position: absolute; inset: 0; pointer-events: none; opacity: 0.5; z-index: 0;
             background-image: radial-gradient(rgba(255,255,255,0.09) 1.4px, transparent 1.4px);
             background-size: 15px 15px;
             -webkit-mask-image: radial-gradient(circle at 100% 0%, #000 0%, transparent 62%);
             mask-image: radial-gradient(circle at 100% 0%, #000 0%, transparent 62%);
         }
-        .wallet-balance-top { position: relative; display: flex; align-items: center; justify-content: space-between; }
+        .wallet-balance-top { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; }
         .wallet-balance-icon {
-            width: 42px; height: 42px; border-radius: 13px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-            background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.24); color: #fff;
+            width: 44px; height: 44px; border-radius: 14px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.13); border: 1px solid rgba(255,255,255,0.3); color: #fff;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.22);
             -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
         }
         .wallet-balance-icon svg { width: 20px; height: 20px; }
         .wallet-balance-tag {
-            font-size: 11px; font-weight: 700; letter-spacing: 0.3px; color: rgba(255,255,255,0.8);
-            background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); padding: 5px 11px; border-radius: 20px;
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 11px; font-weight: 600; letter-spacing: 0.3px; color: rgba(255,255,255,0.85);
+            background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); padding: 6px 12px 6px 10px; border-radius: 20px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
         }
-        .wallet-balance-label { position: relative; display: block; font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,0.65); letter-spacing: 0.3px; margin-top: 20px; }
-        .wallet-balance-amount { position: relative; font-size: 33px; font-weight: 800; color: #fff; margin: 6px 0 22px; letter-spacing: -0.3px; }
+        .wallet-balance-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #4ADE80; box-shadow: 0 0 6px #4ADE80; flex-shrink: 0; }
+        .wallet-balance-label { position: relative; z-index: 2; display: block; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.6); letter-spacing: 0.6px; text-transform: uppercase; margin-top: 22px; }
+        .wallet-balance-amount { position: relative; z-index: 2; font-size: 37px; font-weight: 700; color: #fff; margin: 7px 0 24px; letter-spacing: -0.4px; font-variant-numeric: tabular-nums; text-shadow: 0 2px 18px rgba(0,0,0,0.25); }
         .wallet-topup-btn {
-            position: relative; width: 100%; display: flex; align-items: center; justify-content: center; gap: 9px;
-            background: #fff; color: #16234A; padding: 14px 22px; border-radius: 16px; font-size: 14.5px; font-weight: 700;
-            box-shadow: 0 10px 22px rgba(0,0,0,0.25);
+            position: relative; z-index: 2; width: 100%; display: flex; align-items: center; justify-content: center; gap: 9px;
+            background: linear-gradient(180deg, #ffffff 0%, #F4F6FB 100%); color: #16234A; padding: 14.5px 22px; border-radius: 16px; font-size: 14.5px; font-weight: 600;
+            box-shadow: 0 12px 26px rgba(0,0,0,0.28), inset 0 1px 0 #fff;
         }
         .wallet-topup-btn:active { transform: scale(0.97); }
         .wallet-topup-btn-icon {
@@ -712,7 +907,7 @@
         .wallet-topup-btn-icon svg { width: 13px; height: 13px; }
 
         .wallet-section-title {
-            display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: var(--text-secondary);
+            display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--text-secondary);
             margin: 22px 2px 12px;
         }
         .wallet-section-title svg { width: 15px; height: 15px; color: var(--text-muted); }
@@ -720,19 +915,19 @@
         /* Amount entry */
         .wallet-amount-input-wrap { position: relative; }
         .wallet-topup-amount-input {
-            width: 100%; padding: 16px 68px 16px 16px; font-size: 21px; font-weight: 800; border: 1.5px solid var(--border);
+            width: 100%; padding: 16px 68px 16px 16px; font-size: 21px; font-weight: 700; border: 1.5px solid var(--border);
             border-radius: 14px; margin-bottom: 0; background: var(--surface); color: var(--text); box-sizing: border-box;
             transition: 0.15s;
         }
         .wallet-topup-amount-input:focus { outline: none; border-color: var(--accent); background: #F8FBFF; }
         .wallet-amount-currency {
             position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none;
-            font-size: 12.5px; font-weight: 700; color: var(--text-muted); background: var(--bg);
+            font-size: 12.5px; font-weight: 600; color: var(--text-muted); background: var(--bg);
             padding: 6px 10px; border-radius: 8px; letter-spacing: 0.3px;
         }
         .wallet-amount-presets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 12px 0 2px; }
         .wallet-preset-chip {
-            padding: 13px 6px; border-radius: 13px; text-align: center; font-size: 14px; font-weight: 700;
+            padding: 13px 6px; border-radius: 13px; text-align: center; font-size: 14px; font-weight: 600;
             background: var(--surface-alt); border: 1.5px solid var(--border); color: var(--text); cursor: pointer; transition: 0.15s;
         }
         .wallet-preset-chip:active { transform: scale(0.94); }
@@ -744,20 +939,29 @@
             background: linear-gradient(135deg, #16234A 0%, #24345E 100%); color: #fff;
             box-shadow: 0 10px 22px rgba(15,30,61,0.3);
         }
-        .wallet-pay-info-label { position: relative; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.6); letter-spacing: 0.3px; }
+        .wallet-pay-info-label { position: relative; font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.6); letter-spacing: 0.3px; }
         .wallet-pay-info-card .pm-copy-row p { color: #fff; }
         .wallet-pay-info-card .pm-copy-btn { background: rgba(255,255,255,0.14); color: #fff; }
         .wallet-pay-info-card .pm-copy-btn:active { background: rgba(255,255,255,0.3); transform: scale(0.92); }
 
         /* Top up history rows */
         .wallet-topup-row {
-            display: flex; align-items: center; gap: 12px;
-            background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 13px 14px;
-            margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); cursor: pointer; transition: 0.15s;
+            position: relative; overflow: hidden;
+            display: flex; align-items: center; gap: 13px;
+            background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 14px 16px 14px 19px;
+            margin-bottom: 10px; box-shadow: 0 2px 10px rgba(15,23,42,0.05); cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
-        .wallet-topup-row:active { transform: scale(0.98); }
+        .wallet-topup-row::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--row-accent, var(--accent));
+        }
+        .wallet-topup-row:active { transform: scale(0.98); box-shadow: 0 1px 4px rgba(15,23,42,0.05); }
+        .wallet-topup-row.st-pending { --row-accent: #C0891E; }
+        .wallet-topup-row.st-processing { --row-accent: #405DE6; }
+        .wallet-topup-row.st-rejected { --row-accent: #C0392B; }
+        .wallet-topup-row.st-completed { --row-accent: #1E8E4F; }
         .wallet-topup-row-icon {
-            width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+            width: 42px; height: 42px; border-radius: 13px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
             background: var(--accent-soft); color: var(--accent);
         }
         .wallet-topup-row-icon svg { width: 18px; height: 18px; }
@@ -767,8 +971,15 @@
         .wallet-topup-row-icon.st-completed { background: #E7F8EE; color: #1E8E4F; }
         .wallet-topup-row-body { flex: 1; min-width: 0; }
         .wallet-topup-row-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-        .wallet-topup-amount { font-size: 15.5px; font-weight: 800; color: var(--text); }
-        .wallet-topup-meta { font-size: 12px; color: var(--text-muted); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .wallet-topup-amount { font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: -0.2px; font-variant-numeric: tabular-nums; }
+        .wallet-topup-meta { font-size: 12px; color: var(--text-muted); margin-top: 3.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        #wallet .badge, #wallet-topup-detail-body .badge {
+            padding: 5px 12px 5px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.2px;
+            display: inline-flex; align-items: center; gap: 5px;
+        }
+        #wallet .badge::before, #wallet-topup-detail-body .badge::before {
+            content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0;
+        }
 
         /* ===================== PROFILE PAGE — REDESIGN ===================== */
         /* Hero card: gradient cover + centered avatar overlapping the bottom edge */
@@ -790,13 +1001,17 @@
             border-radius: 0 0 24px 24px;
             padding: 56px 18px 20px; text-align: center; position: relative;
         }
-        .profile-hero-name { font-size: 18px; font-weight: 800; color: var(--text); margin-top: 4px; }
+        .profile-hero-name { font-size: 18px; font-weight: 700; color: var(--text); margin-top: 4px; }
         .profile-hero-id { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+        .profile-hero-id-row { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 3px; }
+        .profile-hero-id-row .profile-hero-id { margin-top: 0; }
+        .profile-id-copy-btn { width: 22px; height: 22px; border-radius: 6px; }
+        .profile-id-copy-btn svg { width: 12px; height: 12px; }
         .profile-hero-tier { display: flex; justify-content: center; margin-top: 10px; }
         .profile-hero-edit-btn {
             margin-top: 14px; display: inline-flex; align-items: center; gap: 6px;
             background: var(--accent-soft); color: var(--accent); border: none; cursor: pointer;
-            font-size: 12.5px; font-weight: 700; padding: 8px 16px; border-radius: 20px; transition: 0.15s;
+            font-size: 12.5px; font-weight: 600; padding: 8px 16px; border-radius: 20px; transition: 0.15s;
         }
         .profile-hero-edit-btn:active { transform: scale(0.96); }
         .profile-hero-edit-btn svg { width: 13px; height: 13px; }
@@ -837,7 +1052,7 @@
 
         /* ===================== FRAME COLLECTION PAGE ===================== */
         .frame-type-tabs { display: flex; gap: 8px; margin-bottom: 14px; }
-        .frame-type-tab { flex: 1; padding: 10px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--surface); color: var(--text-muted); font-weight: 700; font-size: 13px; cursor: pointer; transition: 0.15s; }
+        .frame-type-tab { flex: 1; padding: 10px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--surface); color: var(--text-muted); font-weight: 600; font-size: 13px; cursor: pointer; transition: 0.15s; }
         .frame-type-tab.active { border-color: var(--accent); color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
         .frame-collection-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         .frame-coll-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 6px; position: relative; }
@@ -848,8 +1063,8 @@
         .frame-coll-thumb.locked img { filter: grayscale(1) brightness(0.55); }
         .frame-coll-lock { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; background: rgba(0,0,0,0.15); }
         .frame-coll-lock svg { width: 20px; height: 20px; }
-        .frame-coll-name { font-size: 12.5px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .frame-coll-rarity { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
+        .frame-coll-name { font-size: 12.5px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .frame-coll-rarity { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
         .frame-coll-rarity.rarity-common { color: #64748B; }
         .frame-coll-rarity.rarity-rare { color: #2563EB; }
         .frame-coll-rarity.rarity-epic { color: #9333EA; }
@@ -858,8 +1073,8 @@
         .frame-coll-progress-track { height: 5px; border-radius: 3px; background: var(--border); overflow: hidden; margin-top: 2px; }
         .frame-coll-progress-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.3s ease; }
         .frame-coll-progress-text { font-size: 10.5px; color: var(--text-muted); }
-        .frame-coll-event-badge { position: absolute; top: 8px; right: 8px; background: #FA3E3E; color: #fff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
-        .frame-coll-btn { margin-top: 2px; padding: 7px; border-radius: 9px; border: none; font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; }
+        .frame-coll-event-badge { position: absolute; top: 8px; right: 8px; background: #FA3E3E; color: #fff; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .frame-coll-btn { margin-top: 2px; padding: 7px; border-radius: 9px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; text-align: center; }
         .frame-coll-btn.equip { background: var(--accent); color: #fff; }
         .frame-coll-btn.unequip { background: var(--border); color: var(--text); }
         .frame-coll-btn.manual-locked { background: var(--border); color: var(--text-muted); cursor: default; }
@@ -868,16 +1083,16 @@
 
         /* Google account card (Profile page) */
         .google-account-card { margin-bottom: 14px; }
-        .google-login-btn { width: 100%; padding: 11px 12px; border-radius: 10px; font-weight: 600; font-size: 14px; border: 1px solid #DADCE0; background: var(--surface); color: #3C4043; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+        .google-login-btn { width: 100%; padding: 11px 12px; border-radius: 10px; font-weight: 500; font-size: 14px; border: 1px solid #DADCE0; background: var(--surface); color: #3C4043; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
         .google-login-btn:disabled { opacity: 0.6; }
         .google-login-btn:active { background: var(--surface-alt); }
         .google-account-hint { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 6px; }
         .google-account-signedin { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         .google-account-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: var(--accent-soft); }
         .google-account-details { flex: 1; min-width: 0; }
-        .google-account-details span { display: block; font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .google-account-details span { display: block; font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .google-account-details small { font-size: 11.5px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
-        .google-signout-btn { flex-shrink: 0; background: var(--bg); color: #C0392B; border: none; padding: 7px 12px; border-radius: 8px; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+        .google-signout-btn { flex-shrink: 0; background: var(--bg); color: #C0392B; border: none; padding: 7px 12px; border-radius: 8px; font-size: 12.5px; font-weight: 500; cursor: pointer; }
         .google-signout-btn:active { background: var(--border); }
         .avatar-upload-badge { position: absolute; top: 0px; right: 0px; width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: var(--on-color); display: flex; align-items: center; justify-content: center; border: 2px solid var(--surface); }
         .avatar-upload-badge svg { width: 13px; height: 13px; }
@@ -1157,14 +1372,14 @@
             display: flex; align-items: center; justify-content: center; border: 4px solid var(--surface); z-index: 2;
         }
         .tier-preview-photo svg { width: 34px; height: 34px; }
-        .tier-preview-label { font-size: 10.5px; font-weight: 700; color: var(--text-secondary); text-align: center; }
+        .tier-preview-label { font-size: 10.5px; font-weight: 600; color: var(--text-secondary); text-align: center; }
 
         /* Order Detail modal: clean 2-column info grid instead of stacked rows */
         .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
         .detail-grid-item { background: var(--surface-alt); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
         .detail-grid-item.full { grid-column: 1 / -1; }
-        .detail-grid-item span { display: block; font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 4px; }
-        .detail-grid-item b { display: block; font-size: 14px; color: var(--text); font-weight: 700; word-break: break-word; }
+        .detail-grid-item span { display: block; font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 4px; }
+        .detail-grid-item b { display: block; font-size: 14px; color: var(--text); font-weight: 600; word-break: break-word; }
 
         /* Mini profile strip shown at the top of the Store (below header) */
         .mini-profile-bar { margin: 10px 15px 0; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
@@ -1172,7 +1387,7 @@
         .mini-profile-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
         .mini-profile-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .mini-profile-info { flex: 1; min-width: 0; }
-        .mini-profile-info span { display: block; font-size: 15px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mini-profile-info span { display: block; font-size: 15px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .mini-profile-info small { font-size: 11px; color: var(--text-muted); }
 
         /* Social links (Facebook / Telegram / TikTok) on the Profile page - 3 separate grid cards */
@@ -1180,11 +1395,11 @@
         .social-link-btn { flex-direction: column; padding: 14px 8px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--surface-alt); border: 1px solid var(--border); text-decoration: none; transition: 0.15s; }
         .social-link-btn:active { transform: scale(0.96); background: var(--bg); }
         .social-link-icon { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--on-color); flex-shrink: 0; }
-        .social-link-name { font-size: 12px; font-weight: 600; color: var(--text); }
+        .social-link-name { font-size: 12px; font-weight: 500; color: var(--text); }
 
         /* ===================== LIQUID GLASS RESKIN ===================== */
         /* Header, bottom nav, notif dot ring */
-        .header { background: var(--glass-bg-strong); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border-bottom: 1px solid var(--glass-border); box-shadow: var(--glass-shadow-sm); }
+        .header { background: var(--glass-bg-strong); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border-bottom: 1px solid var(--glass-border); box-shadow: var(--glass-shadow-sm); transform: translateZ(0); will-change: transform; }
 
         /* Bottom nav = a floating 3D glass dock, detached from the screen edge */
         .bottom-nav {
@@ -1197,11 +1412,13 @@
             padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 0px));
             box-shadow: 0 16px 40px -10px rgba(20,30,60,0.35), inset 0 1px 1px rgba(255,255,255,0.5), inset 0 -1px 8px rgba(0,0,0,0.04);
             position: fixed;
+            transform: translateZ(0);
+            will-change: transform;
         }
         html[data-theme="dark"] .bottom-nav { box-shadow: 0 16px 40px -10px rgba(0,0,10,0.6), inset 0 1px 1px rgba(255,255,255,0.06), inset 0 -1px 8px rgba(0,0,0,0.3); }
         .nav-item { border-radius: 16px; padding: 5px 0 4px; transition: color 0.2s ease; position: relative; }
         .nav-label { transition: transform 0.2s ease, opacity 0.2s ease; }
-        .nav-item.active .nav-label { transform: translateY(-1px); font-weight: 700; }
+        .nav-item.active .nav-label { transform: translateY(-1px); font-weight: 600; }
 
         /* Each icon sits in its own little 3D glass button — flat by default,
            and "pops" up out of the dock with a glossy highlight + drop shadow
@@ -1252,13 +1469,14 @@
            single full-screen sheet, one on screen at a time) keeps the
            real blur; the rest keep the same translucent glass tint
            without the per-element blur cost. */
-        .game-card-name, .list-card, .notif-item, .detail-form-card, .stat-box, .vip-card,
+        .game-card, .list-card, .notif-item, .detail-form-card, .stat-box, .vip-card,
         .package-card, .payment-option, .google-account-signedin, .history-date-chip,
         .mini-profile-bar, .upload-shot-box, .id-result-card, .id-fail-card,
         .social-link-btn, .detail-grid-item, .vip-stat, .success-box {
             background: var(--glass-bg-strong);
             border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow-sm);
         }
+        .game-card-name { border-top: 1px solid var(--glass-border); }
         .modal-box {
             background: var(--glass-bg); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
             border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow-sm);
@@ -1269,7 +1487,7 @@
         .package-card.selected .pc-price-bar { background: var(--accent-soft); }
         .modal-box { border-radius: 26px 26px 0 0; }
         .package-card { border-radius: 20px; }
-        .game-card-img-wrap { border-radius: 20px; border-color: var(--glass-border); }
+        .game-card { border-radius: 20px; }
         .list-card, .detail-form-card, .stat-box, .vip-card, .mini-profile-bar { border-radius: 20px; }
         .payment-option, .history-date-chip, .cat-filter-chip { border-radius: 18px; }
         .upload-shot-box { border-radius: 20px; }
@@ -1333,10 +1551,13 @@
         <symbol id="icon-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></symbol>
         <symbol id="icon-frame" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"></rect><circle cx="12" cy="12" r="4.2"></circle></symbol>
         <symbol id="icon-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="9" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></symbol>
+        <symbol id="icon-alert" viewBox="0 0 24 24"><line x1="12" y1="7" x2="12" y2="13.5"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></symbol>
+        <symbol id="icon-info" viewBox="0 0 24 24"><line x1="12" y1="17" x2="12" y2="11"></line><line x1="12" y1="7" x2="12.01" y2="7"></line></symbol>
+        <symbol id="icon-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4"></rect><path d="M12 8v13"></path><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"></path><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"></path></symbol>
     </svg>
 
     <!-- Toast Notification -->
-    <div id="toast"><span class="toast-icon-circle" id="toast-icon-circle"><svg class="ui-icon" id="toast-icon" style="color:#fff;"><use id="toast-icon-use" href="#icon-check"></use></svg></span> <span id="toast-msg">Success!</span></div>
+    <div id="toast"><span class="toast-icon-circle" id="toast-icon-circle"><svg class="ui-icon" id="toast-icon" style="color:#fff;"><use id="toast-icon-use" href="#icon-check"></use></svg></span> <span id="toast-msg">Success!</span> <svg class="ui-icon toast-close" onclick="window.hideToast && window.hideToast()"><use href="#icon-close"></use></svg></div>
 
     <!-- Header -->
     <header class="header">
@@ -1353,7 +1574,7 @@
                     <svg class="svg-icon" id="theme-toggle-icon" style="stroke:currentColor;"><use href="#icon-sun"></use></svg>
                 </span>
             </div>
-            <div class="header-icon" onclick="openNotificationsModal()"><svg class="ui-icon" style="width: 20px;"><use href="#icon-bell"></use></svg><span class="notif-dot" id="notif-dot"></span></div>
+            <div class="header-icon" onclick="openNotificationsPage()"><svg class="ui-icon" style="width: 20px;"><use href="#icon-bell"></use></svg><span class="notif-dot" id="notif-dot"></span></div>
         </div>
     </header>
 
@@ -1406,6 +1627,20 @@
                 <div class="skel-game-card"><div class="skel skel-img"></div><div class="skel skel-name"></div></div>
                 <div class="skel-game-card"><div class="skel skel-img"></div><div class="skel skel-name"></div></div>
                 <div class="skel-game-card"><div class="skel skel-img"></div><div class="skel skel-name"></div></div>
+                <div class="skel-game-card"><div class="skel skel-img"></div><div class="skel skel-name"></div></div>
+                <div class="skel-game-card"><div class="skel skel-img"></div><div class="skel skel-name"></div></div>
+                <div class="skel-game-card"><div class="skel skel-img"></div><div class="skel skel-name"></div></div>
+            </div>
+        </div>
+
+        <!-- VOUCHER PAGE — games/servers whose packages are fulfilled via the
+             G2Bulk Giftcards & Vouchers catalogue (see fulfillProvider ===
+             'g2bulk_voucher' in the admin game editor). Same card grid and
+             purchase flow as Home, just pre-filtered to voucher-only entries. -->
+        <div id="voucher" class="page-section">
+            <h2 class="title-header">Vouchers & Gift Cards</h2>
+            <p class="empty-msg" style="text-align:left;padding:0 2px 12px;">Instant-delivery gift cards & top-up vouchers.</p>
+            <div class="cards-grid" id="voucher-games-grid">
                 <div class="skel-game-card"><div class="skel skel-img"></div><div class="skel skel-name"></div></div>
                 <div class="skel-game-card"><div class="skel skel-img"></div><div class="skel skel-name"></div></div>
                 <div class="skel-game-card"><div class="skel skel-img"></div><div class="skel skel-name"></div></div>
@@ -1487,7 +1722,7 @@
                         <div class="wallet-pay-info-card">
                             <p class="wallet-pay-info-label">Transfer the exact amount to</p>
                             <div class="pm-copy-row" style="margin-top:6px;">
-                                <p style="font-size:18px;font-weight:800;letter-spacing:0.3px;" id="wallet-pm-number"></p>
+                                <p style="font-size:18px;font-weight: 700;letter-spacing:0.3px;" id="wallet-pm-number"></p>
                                 <button type="button" class="pm-copy-btn" onclick="copyPaymentField('wallet-pm-number', this)" title="Copy phone number">
                                     <svg class="ui-icon"><use href="#icon-copy"></use></svg>
                                 </button>
@@ -1500,7 +1735,7 @@
                             </div>
                         </div>
 
-                        <label style="display:block;font-size:13px;font-weight:700;color:var(--text);margin-top:14px;">Upload Payment Receipt</label>
+                        <label style="display:block;font-size:13px;font-weight: 600;color:var(--text);margin-top:14px;">Upload Payment Receipt</label>
                         <label class="upload-shot-box" id="wallet-upload-shot-box" for="wallet-receipt-file">
                             <div class="upload-shot-icon"><svg class="ui-icon"><use href="#icon-camera"></use></svg></div>
                             <span class="upload-shot-label">Upload Screenshot</span>
@@ -1581,7 +1816,12 @@
                     <input type="file" id="profile-photo-file" class="avatar-upload-input" accept="image/*" onchange="previewProfilePhoto(event)">
 
                     <div class="profile-hero-name" id="profile-hero-name">Guest</div>
-                    <div class="profile-hero-id" id="profile-hero-id"></div>
+                    <div class="profile-hero-id-row">
+                        <span class="profile-hero-id" id="profile-hero-id"></span>
+                        <button type="button" class="pm-copy-btn profile-id-copy-btn" id="profile-id-copy-btn" onclick="copyProfileId(this)" title="Copy ID">
+                            <svg class="ui-icon"><use href="#icon-copy"></use></svg>
+                        </button>
+                    </div>
                     <div class="profile-hero-tier" id="vip-tier-badge-hero"></div>
 
                     <button type="button" class="profile-hero-edit-btn" id="profile-edit-toggle-btn" onclick="toggleProfileEditCard()">
@@ -1621,13 +1861,13 @@
                     </div>
                 </div>
                 <div style="margin-top:8px;">
-                    <span onclick="togglePrefsAutoInfo()" role="button" aria-label="Show auto-switch info" style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted);font-weight:600;cursor:pointer;">
+                    <span onclick="togglePrefsAutoInfo()" role="button" aria-label="Show auto-switch info" style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted);font-weight: 500;cursor:pointer;">
                         Auto-switch info
                         <svg class="ui-icon" id="prefs-auto-info-chevron" style="width:12px;height:12px;transition:transform 0.2s;"><use href="#icon-chevron-right"></use></svg>
                     </span>
                     <p id="prefs-auto-info-text" style="display:none;font-size:11px;color:var(--text-muted);margin-top:6px;font-weight:400;line-height:1.5;">
                         Auto-switches: Light 7 AM–7 PM, Dark 7 PM–7 AM.
-                        <span id="theme-auto-reset-link" style="color:var(--accent);font-weight:700;cursor:pointer;display:none;" onclick="resetThemeToAuto()">Switched off — tap to re-enable auto</span>
+                        <span id="theme-auto-reset-link" style="color:var(--accent);font-weight: 600;cursor:pointer;display:none;" onclick="resetThemeToAuto()">Switched off — tap to re-enable auto</span>
                     </p>
                 </div>
             </div>
@@ -1687,7 +1927,7 @@
                 <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
                     <span class="prefs-row-label">
                         <span class="prefs-row-icon"><svg class="ui-icon" style="width:18px;height:18px;"><use href="#icon-frame"></use></svg></span>
-                        <span>Frame Collection <span id="frame-collection-count-badge" style="font-size:11px;color:var(--text-muted);font-weight:600;"></span></span>
+                        <span>Frame Collection <span id="frame-collection-count-badge" style="font-size:11px;color:var(--text-muted);font-weight: 500;"></span></span>
                     </span>
                     <svg class="ui-icon" style="width:16px;height:16px;color:var(--text-muted);"><use href="#icon-chevron-right"></use></svg>
                 </div>
@@ -1752,7 +1992,7 @@
                 <div class="header-icon" style="width:36px;height:36px;" onclick="closeServerSelect()">
                     <svg class="ui-icon" style="width:18px;"><use href="#icon-chevron-left"></use></svg>
                 </div>
-                <h2 style="font-size:18px; font-weight:700; color:var(--text);" id="server-select-title">Game</h2>
+                <h2 style="font-size:18px; font-weight: 600; color:var(--text);" id="server-select-title">Game</h2>
             </div>
             <div class="cards-grid" id="server-select-grid"></div>
         </div>
@@ -1764,7 +2004,7 @@
                 <div class="header-icon" style="width:36px;height:36px;" onclick="closeFrameCollection()">
                     <svg class="ui-icon" style="width:18px;"><use href="#icon-chevron-left"></use></svg>
                 </div>
-                <h2 style="font-size:18px; font-weight:700; color:var(--text);">Frame Collection</h2>
+                <h2 style="font-size:18px; font-weight: 600; color:var(--text);">Frame Collection</h2>
             </div>
             <div class="frame-type-tabs" id="frame-type-tabs">
                 <button type="button" class="frame-type-tab active" data-ftype="avatar" onclick="setFrameCollectionTab('avatar')">Avatar Frames</button>
@@ -1781,10 +2021,24 @@
                 <div class="header-icon" style="width:36px;height:36px;" onclick="closeGameDetail()">
                     <svg class="ui-icon" style="width:18px;"><use href="#icon-chevron-left"></use></svg>
                 </div>
-                <h2 style="font-size:18px; font-weight:700; color:var(--text);" id="detail-game-name">Game</h2>
+                <h2 style="font-size:18px; font-weight: 600; color:var(--text);" id="detail-game-name">Game</h2>
             </div>
-            <img id="detail-game-banner" src="" alt="" style="width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:12px; margin-bottom:8px;">
+            <div class="detail-layout">
+            <div class="detail-banner-col">
+            <img id="detail-game-banner" src="" alt="" style="width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:12px; margin-bottom:10px;">
 
+            <div class="game-desc-card" id="detail-game-desc-wrap" style="display:none;">
+                <div class="game-desc-head">
+                    <div class="game-desc-head-icon"><svg class="ui-icon"><use href="#icon-info"></use></svg></div>
+                    <h4>Description</h4>
+                </div>
+                <p class="game-desc-text" id="detail-game-desc-text"></p>
+                <button type="button" class="game-desc-toggle" id="detail-game-desc-toggle" onclick="toggleGameDescExpand()" style="display:none;">Show more</button>
+            </div>
+            </div>
+            <div class="detail-main-col">
+
+            <div id="account-info-section">
             <h3 class="detail-section-title">Account Info</h3>
             <div class="detail-form-card">
                 <div style="display:flex; gap:10px;">
@@ -1807,10 +2061,11 @@
                 </button>
                 <div id="detail-id-status" style="margin-top:8px;display:none;"></div>
             </div>
+            </div>
 
             <h3 class="detail-section-title">Select Currency Package</h3>
             <div class="pkg-type-tabs" id="pkg-type-tabs" style="display:none;"></div>
-            <div id="detail-package-list" class="package-grid"></div>
+            <div class="package-grid-scroll"><div id="detail-package-list" class="package-grid"></div></div>
 
             <div id="detail-payment-section" style="display:none;">
                 <h3 class="detail-section-title">How do you want to pay?</h3>
@@ -1832,7 +2087,7 @@
                     <div id="detail-payment-info" class="detail-form-card" style="display:none; margin-top:10px;">
                         <p style="font-size:12px;color:var(--text-secondary);">Transfer the exact amount to:</p>
                         <div class="pm-copy-row" style="margin-top:2px;">
-                            <p style="font-size:17px;font-weight:700;color:#1877F2;" id="pm-number"></p>
+                            <p style="font-size:17px;font-weight: 600;color:#1877F2;" id="pm-number"></p>
                             <button type="button" class="pm-copy-btn" onclick="copyPaymentField('pm-number', this)" title="Copy phone number">
                                 <svg class="ui-icon"><use href="#icon-copy"></use></svg>
                             </button>
@@ -1858,10 +2113,13 @@
                         <p id="receipt-upload-status" style="font-size:12px;color:var(--text-secondary);display:none;"></p>
 
                         <label style="display:block;margin-top:14px;">Transaction ID</label>
-                        <input type="text" id="detail-transaction-id" placeholder="e.g. the reference number on your receipt" autocomplete="off" style="width:100%;padding:11px 14px;border-radius:12px;border:1px solid var(--border-glass);background:var(--fill-soft);color:var(--text);font-size:14px;">
-                        <p style="font-size:11px;color:var(--text-secondary);margin-top:4px;">Copy the transaction / reference number shown on your payment receipt.</p>
+                        <input type="text" id="detail-transaction-id" placeholder="Detected automatically after you upload your receipt" autocomplete="off" readonly style="width:100%;padding:11px 14px;border-radius:12px;border:1px solid var(--border-glass);background:var(--fill-soft);color:var(--text);font-size:14px;">
+                        <p style="font-size:11px;color:var(--text-secondary);margin-top:4px;">We read this automatically from your receipt screenshot. If it can't be found, it's set to "None".</p>
                     </div>
                 </div>
+            </div>
+
+            </div>
             </div>
 
             <div class="slide-confirm-wrap" id="detail-confirm-wrap" style="margin-top:20px;">
@@ -1878,31 +2136,44 @@
             </div>
         </div>
 
+        <!-- NOTIFICATIONS LIST PAGE -->
+        <div id="notif-page" class="page-section">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+                <div class="header-icon" style="width:36px;height:36px;" onclick="closeNotificationsPage()">
+                    <svg class="ui-icon" style="width:18px;"><use href="#icon-chevron-left"></use></svg>
+                </div>
+                <h2 style="font-size:18px; font-weight: 600; color:var(--text);">Notifications</h2>
+            </div>
+            <div id="notif-page-list"></div>
+        </div>
+
+        <!-- NOTIFICATION DETAIL PAGE -->
+        <div id="notif-detail" class="page-section">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+                <div class="header-icon" style="width:36px;height:36px;" onclick="closeNotificationDetail()">
+                    <svg class="ui-icon" style="width:18px;"><use href="#icon-chevron-left"></use></svg>
+                </div>
+                <h2 style="font-size:18px; font-weight: 600; color:var(--text); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" id="notif-detail-title">Notification</h2>
+            </div>
+            <div class="notif-item">
+                <span id="notif-detail-date"></span>
+                <p id="notif-detail-body" style="white-space:pre-wrap; margin-top:8px;"></p>
+            </div>
+        </div>
+
     </main>
 
     <!-- Order Success Screen -->
     <div class="success-overlay" id="success-overlay">
         <div class="success-box">
+            <div id="success-voucher-code-block"></div>
             <div class="success-check" id="success-check-icon">
                 <svg class="ui-icon" style="width:36px;height:36px;color:#28a745;"><use href="#icon-check"></use></svg>
             </div>
-            <h3 style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;" id="success-title">Order Confirmed</h3>
+            <h3 style="font-size:18px;font-weight: 600;color:var(--text);margin-bottom:8px;" id="success-title">Order Confirmed</h3>
             <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;" id="success-subtext">We've received your order and receipt. Our team will confirm it shortly.</p>
             <div id="success-timeline" style="text-align:left;"></div>
             <button class="btn btn-primary" onclick="goHomeFromSuccess()">Back to Home</button>
-        </div>
-    </div>
-
-    <!-- Notifications Modal -->
-    <div class="modal-overlay" id="notif-modal-overlay" onclick="if(event.target===this) closeNotificationsModal()">
-        <div class="modal-box">
-            <div class="modal-header">
-                <h3>Notifications</h3>
-                <div class="modal-close" onclick="closeNotificationsModal()">
-                    <svg class="ui-icon" style="width:18px;height:18px;"><use href="#icon-close"></use></svg>
-                </div>
-            </div>
-            <div class="modal-body" id="notif-modal-list"></div>
         </div>
     </div>
 
@@ -1924,6 +2195,10 @@
         <div class="nav-item active" id="btn-home" onclick="showPage('home')">
             <span class="nav-icon-wrap"><svg class="ui-icon"><use href="#icon-home"></use></svg></span>
             <span class="nav-label">Home</span>
+        </div>
+        <div class="nav-item" id="btn-voucher" onclick="showPage('voucher')">
+            <span class="nav-icon-wrap"><svg class="ui-icon"><use href="#icon-gift"></use></svg></span>
+            <span class="nav-label">Voucher</span>
         </div>
         <div class="nav-item" id="btn-history" onclick="showPage('history')">
             <span class="nav-icon-wrap"><svg class="ui-icon"><use href="#icon-history"></use></svg></span>
@@ -1974,42 +2249,69 @@
             if (pageId === 'profile' && window.renderTierPreviewGrid) window.renderTierPreviewGrid();
             if (pageId === 'profile' && window.renderPushToggleUI) window.renderPushToggleUI();
             if (pageId === 'leaderboard' && window.loadLeaderboard) window.loadLeaderboard();
+            if (pageId === 'voucher' && window.renderVoucherGames) window.renderVoucherGames();
         }
 
+        let toastHideTimer = null;
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
+            const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+            // Four pastel-card variants: success / fail / warning / info.
+            // Each has a light-mode tint + a translucent dark-mode tint so the
+            // card always reads clearly against the current surface.
             const styles = {
-                success: { icon: '#icon-check', circleBg: '#22C55E', textColor: '#4ADE80', border: 'rgba(74,222,128,0.35)' },
-                fail: { icon: '#icon-close', circleBg: '#EF4444', textColor: '#FCA5A5', border: 'rgba(239,68,68,0.35)' }
+                success: { icon: '#icon-check', circleBg: '#22C55E',
+                    bg: dark ? 'rgba(34,197,94,0.16)' : '#E9F9EF', text: dark ? '#4ADE80' : '#1E8E4F', border: dark ? 'rgba(74,222,128,0.35)' : 'rgba(30,142,79,0.2)' },
+                fail: { icon: '#icon-close', circleBg: '#EF4444',
+                    bg: dark ? 'rgba(239,68,68,0.16)' : '#FDECEC', text: dark ? '#FF9B9B' : '#C0392B', border: dark ? 'rgba(239,68,68,0.35)' : 'rgba(192,57,43,0.2)' },
+                warning: { icon: '#icon-alert', circleBg: '#F5A623',
+                    bg: dark ? 'rgba(245,166,35,0.16)' : '#FFF8E1', text: dark ? '#FFCA5C' : '#8A6100', border: dark ? 'rgba(245,166,35,0.35)' : 'rgba(138,97,0,0.2)' },
+                info: { icon: '#icon-info', circleBg: '#3B82F6',
+                    bg: dark ? 'rgba(76,147,255,0.16)' : '#EAF2FF', text: dark ? '#8AB4FF' : '#1877F2', border: dark ? 'rgba(76,147,255,0.35)' : 'rgba(24,119,242,0.2)' }
             };
-            // Any error-ish type string (error/fail/danger) maps to the red style;
-            // unrecognized types fall back to red too, so an uncaught error never
-            // silently renders green.
-            const isErrorType = type && type !== 'success';
-            const s = styles[type] || (isErrorType ? styles.fail : styles.success);
+            // Back-compat: any error-ish type string (error/fail/danger) maps to
+            // the red style; unrecognized non-success types fall back to red too,
+            // so an uncaught error never silently renders green.
+            const key = styles[type] ? type : (type === 'error' || type === 'danger' ? 'fail' : (type && type !== 'success' ? 'fail' : 'success'));
+            const s = styles[key];
             document.getElementById('toast-icon-use').setAttribute('href', s.icon);
             document.getElementById('toast-icon-circle').style.background = s.circleBg;
+            toast.style.background = s.bg;
             toast.style.borderColor = s.border;
-            toast.style.color = s.textColor;
+            toast.style.color = s.text;
             document.getElementById('toast-msg').innerText = message;
             toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+            clearTimeout(toastHideTimer);
+            toastHideTimer = setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+        function hideToast() {
+            clearTimeout(toastHideTimer);
+            document.getElementById('toast').classList.remove('show');
         }
         window.showPage = showPage;
-        window.showToast = showToast; 
+        window.showToast = showToast;
+        window.hideToast = hideToast;
 
         // Game catalogue (name, image, packages) now lives in Firestore's "games"
         // collection — window.GAMES is kept in sync by the Firebase script below.
         // Payment methods live in Firestore's "paymentMethods" collection, synced
         // the same way into window.PAYMENT_METHODS.
         let selectedPackage = null;
+        // Which bottom-nav page a game's detail modal was opened from (Home
+        // or Voucher) - so closing it returns the customer to the right tab
+        // instead of always dropping back to Home.
+        let gameDetailReturnPage = 'home';
         let activePackageTab = 'currency';
-        // Label shown on a tab button/chip. Admin's two built-in tabs get
-        // friendly names; any custom tab (e.g. "Wow") just uses its own name
-        // as saved by the admin panel, matching pkgTabLabel() in index.html.
+        // Label shown on a tab button/chip. The two built-ins ('package' /
+        // 'currency') can be renamed per game from the admin panel (e.g.
+        // "Diamond", "UC") - currentGameTabLabels holds whatever the
+        // currently-open game saved, falling back to the generic default
+        // name if that game never renamed them. Any custom tab (e.g. "Wow")
+        // just uses its own name as saved by the admin panel.
+        let currentGameTabLabels = {};
         function pkgTabLabel(tabId) {
-            if (tabId === 'package') return 'Package';
-            if (tabId === 'currency') return 'Currency';
+            if (tabId === 'package') return currentGameTabLabels.package || 'Package';
+            if (tabId === 'currency') return currentGameTabLabels.currency || 'Currency';
             return tabId;
         }
         // A package's organizational tab is its `tab` field. Older saved
@@ -2033,9 +2335,11 @@
         );
         let selectedGameId = null;
         let selectedGameG2BulkCode = null;
+        let selectedGameNeedsPlayerId = true;
         let selectedGameJCPlaysProduct = null;
         let selectedPaymentMethod = null;
         let editingReceiptFile = null;
+        let receiptOcrPromise = null; // resolves once auto-detection of the Transaction ID from the uploaded receipt finishes
         let selectedPaymentType = null; // 'wallet' | 'payment' — how the customer wants to pay for a game order
         let currentWalletBalance = 0; // kept in sync by listenWalletBalance()
         let playerIdVerified = null; // null = not checked, true = valid, false = failed
@@ -2222,6 +2526,34 @@
         }
         window.runPlayerIdCheck = runPlayerIdCheck;
 
+        function renderGameDescCard(description) {
+            const wrap = document.getElementById('detail-game-desc-wrap');
+            const textEl = document.getElementById('detail-game-desc-text');
+            const toggleBtn = document.getElementById('detail-game-desc-toggle');
+            if (!description) {
+                wrap.style.display = 'none';
+                return;
+            }
+            wrap.style.display = 'block';
+            textEl.innerText = description;
+            textEl.classList.remove('expanded');
+            toggleBtn.style.display = 'none';
+            toggleBtn.innerText = 'Show more';
+            // Only show the toggle if the text actually overflows the 4-line clamp.
+            requestAnimationFrame(() => {
+                if (textEl.scrollHeight > textEl.clientHeight + 2) {
+                    toggleBtn.style.display = 'inline-block';
+                }
+            });
+        }
+        function toggleGameDescExpand() {
+            const textEl = document.getElementById('detail-game-desc-text');
+            const toggleBtn = document.getElementById('detail-game-desc-toggle');
+            const expanded = textEl.classList.toggle('expanded');
+            toggleBtn.innerText = expanded ? 'Show less' : 'Show more';
+        }
+        window.toggleGameDescExpand = toggleGameDescExpand;
+
         function openGameDetail(gameId) {
             const game = window.GAMES ? window.GAMES[gameId] : null;
             if (!game) return;
@@ -2232,9 +2564,18 @@
             selectedGameJCPlaysProduct = game.jcplaysProduct || null;
             selectedPackage = null;
 
+            // Voucher/coupon-style games deliver a code rather than crediting a
+            // player account, so the admin can turn off the In-Game ID prompt
+            // entirely for them (missing field defaults to "required", so
+            // existing games keep behaving exactly as before).
+            const needsPlayerId = game.playerIdRequired !== false;
+            selectedGameNeedsPlayerId = needsPlayerId;
+            document.getElementById('account-info-section').style.display = needsPlayerId ? '' : 'none';
+            if (!needsPlayerId) document.getElementById('detail-ingame-id').value = '';
+
             // Games that don't need a Server ID (missing field defaults to "required",
             // so existing games keep behaving exactly as before) hide that input entirely.
-            const needsServerId = game.serverIdRequired !== false;
+            const needsServerId = needsPlayerId && game.serverIdRequired !== false;
             const serverIdWrap = document.getElementById('detail-server-id-wrap');
             serverIdWrap.style.display = needsServerId ? 'block' : 'none';
             if (!needsServerId) document.getElementById('detail-server-id').value = '';
@@ -2248,11 +2589,24 @@
             selectedPaymentMethod = null;
             selectedPaymentType = null;
             editingReceiptFile = null;
+            receiptOcrPromise = null;
             window.currentGamePackages = game.packages;
+            currentGameTabLabels = game.packageTabLabels || {};
+
+            // Voucher/giftcard games (fulfillProvider === 'g2bulk_voucher') show a
+            // small "X left" badge on each package card, sourced live from G2Bulk's
+            // public per-category product list (which includes per-product stock)
+            // - see startVoucherStockRefresh below.
+            if (game.fulfillProvider === 'g2bulk_voucher' && game.g2bulkVoucherCategory) {
+                startVoucherStockRefresh(game.g2bulkVoucherCategory);
+            } else {
+                stopVoucherStockRefresh();
+            }
 
             document.getElementById('detail-game-name').innerText = game.name;
             document.getElementById('detail-game-banner').src = game.banner || game.image;
             document.getElementById('detail-game-banner').alt = game.name;
+            renderGameDescCard(game.description || '');
             loadSavedContactIntoForm();
 
             // Build the tab list from whatever tabs the admin actually put
@@ -2265,9 +2619,10 @@
                 const t = pkgTabOf(pkg);
                 if (!seenTabs.includes(t)) seenTabs.push(t);
             });
-            // Keep a stable, familiar order: built-ins first, then custom
-            // tabs in the order the admin created them.
-            const orderedTabs = ['package', 'currency', ...seenTabs.filter(t => t !== 'package' && t !== 'currency')]
+            // Keep a stable, familiar order: built-ins first (Currency before
+            // Package, matching the admin panel's tab bar), then custom tabs
+            // in the order the admin created them.
+            const orderedTabs = ['currency', 'package', ...seenTabs.filter(t => t !== 'package' && t !== 'currency')]
                 .filter(t => seenTabs.includes(t));
             if (orderedTabs.length > 1) {
                 tabsEl.style.display = 'flex';
@@ -2309,6 +2664,44 @@
         }
         window.switchPackageTab = switchPackageTab;
 
+        // ---------- Voucher live stock ("X left") badge ----------
+        // productId (G2Bulk product id, matches each voucher package's
+        // pkg.voucherId) -> remaining stock count, for whichever voucher
+        // game is currently open. Same public endpoint the admin panel's
+        // Import Products uses (GET /v1/category/:id), so no API key needed.
+        let voucherStockMap = {};
+        let voucherStockInterval = null;
+        const VOUCHER_STOCK_REFRESH_MS = 15000;
+
+        async function fetchVoucherStock(categoryId) {
+            try {
+                const res = await fetch(`https://api.g2bulk.com/v1/category/${encodeURIComponent(categoryId)}`);
+                const data = await res.json();
+                if (!data.success) return;
+                const products = data.products || (data.category ? data.category.products : []) || [];
+                const map = {};
+                products.forEach(p => { map[String(p.id)] = Number(p.stock ?? 0); });
+                voucherStockMap = map;
+                // Only re-render if the customer is still looking at this same
+                // voucher game's package list (stops a stale/slow response from
+                // a game they've already navigated away from overwriting the UI).
+                if (window.currentStorePage === 'game-detail') renderDetailPackageList();
+            } catch (error) {
+                console.error("Voucher stock fetch error:", error);
+            }
+        }
+
+        function startVoucherStockRefresh(categoryId) {
+            stopVoucherStockRefresh();
+            fetchVoucherStock(categoryId);
+            voucherStockInterval = setInterval(() => fetchVoucherStock(categoryId), VOUCHER_STOCK_REFRESH_MS);
+        }
+
+        function stopVoucherStockRefresh() {
+            if (voucherStockInterval) { clearInterval(voucherStockInterval); voucherStockInterval = null; }
+            voucherStockMap = {};
+        }
+
         function renderDetailPackageList() {
             const list = document.getElementById('detail-package-list');
             const packages = window.currentGamePackages || [];
@@ -2326,16 +2719,22 @@
                 return;
             }
 
-            list.innerHTML = entries.map(({ pkg, i }) => {
+            list.innerHTML = entries.map(({ pkg, i }, pos) => {
                 const img = pkg.image || DEFAULT_PACKAGE_ICON;
                 const imgTag = `<img class="pc-img" src="${img}" alt="" loading="lazy" onerror="this.src='${DEFAULT_PACKAGE_ICON}'">`;
+                // Small blue "X left" corner badge, live from G2Bulk stock -
+                // only shown for voucher packages we actually have a stock
+                // number for (voucherStockMap is empty for non-voucher games).
+                const stock = pkg.voucherId ? voucherStockMap[String(pkg.voucherId)] : undefined;
+                const stockBadge = stock !== undefined ? `<span class="pc-stock-badge">${stock} ကျန်</span>` : '';
                 return `
-                <div class="package-card type-currency" data-index="${i}" onclick="selectPackageOption(${i})">
-                    <div class="pc-img-wrap">${imgTag}</div>
+                <div class="package-card type-currency game-card-anim" style="animation-delay:${Math.min(pos * 25, 200)}ms" data-index="${i}" onclick="selectPackageOption(${i})">
+                    <div class="pc-img-wrap">${imgTag}${stockBadge}<span class="pc-selected-check"><svg class="ui-icon"><use href="#icon-check"></use></svg></span></div>
                     <div class="pc-info"><span class="pc-label">${pkg.amount}</span></div>
                     <div class="pc-price-bar"><span class="pc-price">${pkg.price.toLocaleString()} MMK</span></div>
                 </div>`;
             }).join('');
+            revealCardsIn(list);
         }
 
         function selectPackageOption(index) {
@@ -2349,6 +2748,7 @@
             selectedPaymentType = null;
             selectedPaymentMethod = null;
             editingReceiptFile = null;
+            receiptOcrPromise = null;
             document.getElementById('detail-transaction-id').value = '';
             document.querySelectorAll('#detail-pay-type-tabs .pay-type-tab').forEach(el => el.classList.remove('active'));
             document.getElementById('detail-wallet-pay-box').style.display = 'none';
@@ -2370,6 +2770,7 @@
             if (type === 'wallet') {
                 selectedPaymentMethod = null;
                 editingReceiptFile = null;
+            receiptOcrPromise = null;
                 document.getElementById('detail-transaction-id').value = '';
                 document.getElementById('detail-payment-methods-wrap').style.display = 'none';
                 document.getElementById('detail-payment-info').style.display = 'none';
@@ -2427,7 +2828,13 @@
         function renderPaymentMethods() {
             const container = document.getElementById('detail-payment-methods');
             const methods = window.PAYMENT_METHODS || {};
-            const ids = Object.keys(methods);
+            const ids = Object.keys(methods).sort((a, b) => {
+                const oa = methods[a].order, ob = methods[b].order;
+                if (typeof oa === 'number' && typeof ob === 'number') return oa - ob;
+                if (typeof oa === 'number') return -1;
+                if (typeof ob === 'number') return 1;
+                return (methods[a].name || '').localeCompare(methods[b].name || '');
+            });
             if (ids.length === 0) {
                 container.innerHTML = '<p class="empty-msg">No payment methods available yet. Please contact the store.</p>';
                 return;
@@ -2456,6 +2863,89 @@
             document.getElementById('detail-payment-info').style.display = 'flex';
         }
 
+        // ---------- Auto-detect Transaction ID from the uploaded receipt (OCR) ----------
+        // Loads Tesseract.js lazily (only once, on first receipt upload) so pages
+        // that never touch the order form don't pay for it.
+        let tesseractLoadPromise = null;
+        function loadTesseract() {
+            if (window.Tesseract) return Promise.resolve();
+            if (tesseractLoadPromise) return tesseractLoadPromise;
+            tesseractLoadPromise = new Promise((resolve, reject) => {
+                const s = document.createElement('script');
+                s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+                s.onload = () => resolve();
+                s.onerror = () => reject(new Error('Failed to load OCR library'));
+                document.head.appendChild(s);
+            });
+            return tesseractLoadPromise;
+        }
+
+        // Pulls a transaction/reference number out of raw OCR text. Tries the
+        // common labels payment apps use — including Trx/Txn/Trans variants,
+        // "No./Number/ID/Code" suffixes, and Ref/Order/Payment/Invoice/Auth
+        // labels — in priority order; \s* already spans line breaks so it
+        // still matches when the label and value sit on separate lines.
+        // Captured values may contain internal -, _, . (common in reference
+        // numbers) but must start/end alphanumeric so trailing receipt
+        // punctuation isn't swallowed.
+        function extractTransactionId(text) {
+            if (!text) return null;
+            const norm = text.replace(/\|/g, 'I'); // OCR often misreads "I" as a pipe
+            const VAL = '([A-Za-z0-9][A-Za-z0-9\\-_.]{3,28}[A-Za-z0-9])';
+            const labelPatterns = [
+                new RegExp('trans(?:action)?\\s*(?:no\\.?|number|id)[:\\-]?\\s*' + VAL, 'i'),
+                new RegExp('trx\\s*(?:no\\.?|number|ref(?:erence)?|id)?[:\\-]?\\s*' + VAL, 'i'),
+                new RegExp('txn\\s*(?:no\\.?|number|ref(?:erence)?|id)?[:\\-]?\\s*' + VAL, 'i'),
+                new RegExp('(?:reference|ref)\\s*(?:no\\.?|number|id)?[:\\-]?\\s*' + VAL, 'i'),
+                new RegExp('mtcn[:\\-]?\\s*' + VAL, 'i'),
+                new RegExp('(?:order|payment|receipt|invoice|confirmation|control|auth(?:orization)?)\\s*(?:no\\.?|number|code|id)?[:\\-]?\\s*' + VAL, 'i')
+            ];
+            for (const re of labelPatterns) {
+                const m = norm.match(re);
+                if (m && m[1]) return m[1].trim();
+            }
+            // Fallback: most Myanmar mobile-payment receipts (KBZPay, WavePay,
+            // etc.) show one prominent long reference number even when OCR
+            // mangles or drops the label text entirely - grab the longest
+            // digit run as a last resort so the field isn't left "None"
+            // just because the label wasn't recognized.
+            const digitRuns = norm.match(/\d{9,20}/g);
+            if (digitRuns && digitRuns.length) {
+                return digitRuns.reduce((longest, cur) => cur.length > longest.length ? cur : longest, digitRuns[0]);
+            }
+            return null;
+        }
+
+        // Runs OCR on the uploaded receipt and fills the (read-only) Transaction
+        // ID field automatically. Falls back to "None" if nothing is found or
+        // the OCR library/recognition fails, so the customer is never blocked
+        // waiting on it and never has to type it in by hand.
+        async function detectTransactionId(file, inputId, statusId) {
+            const input = document.getElementById(inputId);
+            const statusEl = statusId ? document.getElementById(statusId) : null;
+            input.value = '';
+            input.placeholder = 'Reading receipt...';
+            if (statusEl) { statusEl.style.display = 'block'; statusEl.innerText = 'Reading receipt for transaction ID...'; }
+
+            let result = 'None';
+            try {
+                await loadTesseract();
+                const { data: { text } } = await window.Tesseract.recognize(file, 'eng');
+                result = extractTransactionId(text) || 'None';
+            } catch (err) {
+                console.error('Transaction ID OCR error:', err);
+                result = 'None';
+            }
+            input.value = result;
+            input.placeholder = 'Detected automatically after you upload your receipt';
+            if (statusEl) {
+                statusEl.innerText = result === 'None'
+                    ? 'Transaction ID not found on the receipt — set to "None".'
+                    : `Transaction ID detected: ${result}`;
+            }
+            return result;
+        }
+
         function previewReceiptImage(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -2469,6 +2959,7 @@
                 document.getElementById('upload-shot-change').style.display = 'flex';
             };
             reader.readAsDataURL(file);
+            receiptOcrPromise = detectTransactionId(file, 'detail-transaction-id', 'receipt-upload-status');
         }
 
         // Fallback copy for browsers/webviews (common on older Android / in-app
@@ -2518,12 +3009,117 @@
             }
         }
 
+        // Copies just the user's ID itself (e.g. "PCA-1234"), not the "ID: "
+        // label shown next to it in the profile hero card.
+        function copyProfileId(btnEl) {
+            const text = getGuestId();
+            if (!text) return;
+
+            const onCopied = () => {
+                window.showToast('ID copied!');
+                const original = btnEl.innerHTML;
+                btnEl.innerHTML = '<svg class="ui-icon"><use href="#icon-check"></use></svg>';
+                setTimeout(() => { btnEl.innerHTML = original; }, 1200);
+            };
+            const onFailed = () => {
+                if (legacyCopyText(text)) onCopied();
+                else window.showToast('Could not copy. Please copy manually.', 'fail');
+            };
+
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
+                    navigator.clipboard.writeText(text).then(onCopied).catch(onFailed);
+                } else {
+                    onFailed();
+                }
+            } catch (e) {
+                onFailed();
+            }
+        }
+        window.copyProfileId = copyProfileId;
+
+        // Builds the highlighted "Your Voucher Code(s)" card shown at the top
+        // of both the post-purchase Success screen and the Order Detail
+        // modal, once a voucher/giftcard order has actually delivered its
+        // code(s) (data.deliveredCodes, written by the admin panel/G2Bulk
+        // fulfillment - see g2bulkVoucherProductId flow). Returns '' for any
+        // order that isn't a delivered voucher, so it's safe to splice into
+        // every order's detail HTML unconditionally.
+        function voucherCodeBlockHTML(data) {
+            const codes = Array.isArray(data.deliveredCodes) ? data.deliveredCodes.filter(c => c !== null && c !== undefined && String(c).trim()) : [];
+            if (data.status !== 'Success') return '';
+            if (codes.length === 0) {
+                // Guards against a past bug where a voucher order's Telegram
+                // Confirm could mark it "Success" without ever actually
+                // purchasing/delivering a code from G2Bulk - so instead of
+                // silently showing nothing (looking like the details are
+                // just missing), tell the customer to reach out. Only shown
+                // for orders that were actually voucher-linked in the first
+                // place, never for a normal top-up order.
+                if (!data.g2bulkVoucherProductId) return '';
+                return `
+                    <div class="voucher-code-highlight">
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                            <svg class="ui-icon" style="width:20px;height:20px;color:#B8860B;"><use href="#icon-gift"></use></svg>
+                            <span class="vch-label" style="font-size:13px;font-weight:700;color:#7A5B00;text-transform:uppercase;letter-spacing:0.3px;">Voucher Code Unavailable</span>
+                        </div>
+                        <p style="font-size:13px;color:#7A5B00;margin:0;">Your order is marked Success but no code was found. Please contact support with this order's ID and we'll sort it out.</p>
+                    </div>`;
+            }
+            const jsSafe = s => String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+            const rows = codes.map((c, i) => `
+                <div class="vch-row" style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.65);border-radius:10px;padding:10px 12px;${i > 0 ? 'margin-top:8px;' : ''}">
+                    <span class="mono vch-code" style="flex:1;min-width:0;font-size:15px;font-weight:700;color:#7A5B00;word-break:break-all;">${escapeHtml(String(c))}</span>
+                    <button type="button" class="voucher-copy-btn" onclick="copyVoucherCode('${jsSafe(c)}', this)" aria-label="Copy code">
+                        <svg class="ui-icon" style="width:16px;height:16px;"><use href="#icon-copy"></use></svg>
+                    </button>
+                </div>`).join('');
+            const copyAllBtn = codes.length > 1 ? `
+                <button type="button" class="btn btn-outline" style="width:100%;margin-top:10px;" onclick="copyVoucherCode('${jsSafe(codes.join('\n'))}', this)">Copy All Codes</button>` : '';
+            return `
+                <div class="voucher-code-highlight">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+                        <svg class="ui-icon" style="width:20px;height:20px;color:#B8860B;"><use href="#icon-gift"></use></svg>
+                        <span class="vch-label" style="font-size:13px;font-weight:700;color:#7A5B00;text-transform:uppercase;letter-spacing:0.3px;">Your Voucher Code${codes.length > 1 ? 's' : ''}</span>
+                    </div>
+                    ${rows}
+                    ${copyAllBtn}
+                </div>`;
+        }
+
+        function copyVoucherCode(text, btnEl) {
+            const onCopied = () => {
+                window.showToast('Voucher code copied!');
+                if (btnEl.tagName === 'BUTTON' && btnEl.classList.contains('voucher-copy-btn')) {
+                    const original = btnEl.innerHTML;
+                    btnEl.innerHTML = '<svg class="ui-icon" style="width:16px;height:16px;"><use href="#icon-check"></use></svg>';
+                    setTimeout(() => { btnEl.innerHTML = original; }, 1200);
+                }
+            };
+            const onFailed = () => {
+                if (legacyCopyText(text)) onCopied();
+                else window.showToast('Could not copy. Please copy manually.', 'fail');
+            };
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
+                    navigator.clipboard.writeText(text).then(onCopied).catch(onFailed);
+                } else {
+                    onFailed();
+                }
+            } catch (e) {
+                onFailed();
+            }
+        }
+        window.copyVoucherCode = copyVoucherCode;
+
         function closeGameDetail() {
             selectedPackage = null;
             selectedPaymentMethod = null;
             selectedPaymentType = null;
             editingReceiptFile = null;
-            showPage('home');
+            receiptOcrPromise = null;
+            stopVoucherStockRefresh();
+            showPage(gameDetailReturnPage);
         }
 
         // Live status tracking on the success screen: once an order is placed
@@ -2544,11 +3140,13 @@
             // then swap in live data the moment Firestore confirms the write
             // and on every status change after that.
             timelineEl.innerHTML = orderTimelineHTML(initialData || { status: 'Pending' });
+            document.getElementById('success-voucher-code-block').innerHTML = voucherCodeBlockHTML(initialData || {});
 
             successOrderUnsubscribe = window.onSnapshot(window.doc(window.db, "orders", orderId), (snap) => {
                 if (!snap.exists()) return;
                 const data = snap.data();
                 timelineEl.innerHTML = orderTimelineHTML(data);
+                document.getElementById('success-voucher-code-block').innerHTML = voucherCodeBlockHTML(data);
                 updateSuccessOverlayText(data.status);
             }, (error) => {
                 console.error("Success screen order tracking error:", error);
@@ -2587,6 +3185,7 @@
 
         function goHomeFromSuccess() {
             document.getElementById('success-overlay').classList.remove('show');
+            document.getElementById('success-voucher-code-block').innerHTML = '';
             if (successOrderUnsubscribe) { successOrderUnsubscribe(); successOrderUnsubscribe = null; }
             closeGameDetail();
         }
@@ -2597,7 +3196,7 @@
             const inGameId = document.getElementById('detail-ingame-id').value.trim();
             const serverId = document.getElementById('detail-server-id').value.trim();
 
-            if (!inGameId) { window.showToast('Please enter your In-Game ID', 'fail'); if (window.resetSlideConfirmThumb) window.resetSlideConfirmThumb(); return; }
+            if (selectedGameNeedsPlayerId && !inGameId) { window.showToast('Please enter your In-Game ID', 'fail'); if (window.resetSlideConfirmThumb) window.resetSlideConfirmThumb(); return; }
             if (!selectedPaymentType) { window.showToast('Please choose how you want to pay', 'fail'); if (window.resetSlideConfirmThumb) window.resetSlideConfirmThumb(); return; }
 
             if (selectedGameG2BulkCode && playerIdVerified === false) {
@@ -2619,8 +3218,10 @@
 
             if (!selectedPaymentMethod) { window.showToast('Please select a payment method', 'fail'); if (window.resetSlideConfirmThumb) window.resetSlideConfirmThumb(); return; }
             if (!editingReceiptFile) { window.showToast('Please upload your payment receipt', 'fail'); if (window.resetSlideConfirmThumb) window.resetSlideConfirmThumb(); return; }
-            const transactionId = document.getElementById('detail-transaction-id').value.trim();
-            if (!transactionId) { window.showToast('Please enter the transaction ID from your receipt', 'fail'); if (window.resetSlideConfirmThumb) window.resetSlideConfirmThumb(); return; }
+            // Transaction ID is auto-detected from the receipt (see previewReceiptImage);
+            // wait for that to finish rather than asking the customer to type it in.
+            if (receiptOcrPromise) { try { await receiptOcrPromise; } catch (e) { /* detectTransactionId already falls back to "None" internally */ } }
+            const transactionId = document.getElementById('detail-transaction-id').value.trim() || 'None';
 
             await doSubmitOrder(inGameId, serverId, btnElement, transactionId);
         }
@@ -2772,7 +3373,11 @@
                 g2bulkGameCode: selectedGameG2BulkCode,
                 g2bulkCatalogueName: selectedPackage.g2bulk || null,
                 jcplaysProduct: selectedGameJCPlaysProduct,
-                jcplaysProductId: selectedPackage.jcplays || null
+                jcplaysProductId: selectedPackage.jcplays || null,
+                // Voucher/giftcard packages carry their own G2Bulk product ID
+                // directly on the package (no game-level link needed) - see
+                // pkg-voucher-id in the admin game editor.
+                g2bulkVoucherProductId: selectedPackage.voucherId || null
             }, btnElement);
         }
 
@@ -2788,7 +3393,8 @@
                 g2bulkGameCode: selectedGameG2BulkCode,
                 g2bulkCatalogueName: selectedPackage.g2bulk || null,
                 jcplaysProduct: selectedGameJCPlaysProduct,
-                jcplaysProductId: selectedPackage.jcplays || null
+                jcplaysProductId: selectedPackage.jcplays || null,
+                g2bulkVoucherProductId: selectedPackage.voucherId || null
             }, btnElement);
         }
 
@@ -2858,13 +3464,13 @@
             try {
                 let gid = localStorage.getItem('gz_guest_id');
                 if (!gid) {
-                    gid = 'Guest-' + Math.floor(1000 + Math.random() * 9000);
+                    gid = 'PCA-' + Math.floor(1000 + Math.random() * 9000);
                     localStorage.setItem('gz_guest_id', gid);
                     localStorage.setItem('gz_member_since', String(Date.now()));
                 }
                 return gid;
             } catch (e) {
-                return 'Guest-0000'; // private browsing / storage blocked
+                return 'PCA-0000'; // private browsing / storage blocked
             }
         }
 
@@ -3155,7 +3761,13 @@
         function renderWalletPaymentMethods() {
             const container = document.getElementById('wallet-topup-payment-methods');
             const methods = window.PAYMENT_METHODS || {};
-            const ids = Object.keys(methods);
+            const ids = Object.keys(methods).sort((a, b) => {
+                const oa = methods[a].order, ob = methods[b].order;
+                if (typeof oa === 'number' && typeof ob === 'number') return oa - ob;
+                if (typeof oa === 'number') return -1;
+                if (typeof ob === 'number') return 1;
+                return (methods[a].name || '').localeCompare(methods[b].name || '');
+            });
             if (ids.length === 0) {
                 container.innerHTML = '<p class="empty-msg">No payment methods available yet. Please contact the store.</p>';
                 return;
@@ -3256,7 +3868,7 @@
             list.innerHTML = walletTopupCache.map((t, i) => {
                 const sm = walletStatusIconMeta(t.status);
                 return `
-                <div class="wallet-topup-row" onclick="openWalletTopupDetail(${i})">
+                <div class="wallet-topup-row ${sm.cls}" onclick="openWalletTopupDetail(${i})">
                     <div class="wallet-topup-row-icon ${sm.cls}">
                         <svg class="ui-icon"><use href="${sm.icon}"></use></svg>
                     </div>
@@ -4003,15 +4615,28 @@
         window.loadLeaderboard = loadLeaderboard;
 
         // ---------- Social Links (Facebook / Telegram / TikTok, managed from the admin panel) ----------
+        // Each platform can optionally have a custom icon image uploaded from
+        // the admin panel (data.<platform>Image). Falls back to the built-in
+        // colored SVG glyph whenever no custom image is set — that original
+        // icon markup is captured once, on first render, so it can always be
+        // restored later (e.g. if the admin removes a previously-uploaded image).
+        const socialDefaultIconHTML = {};
         function renderSocialLinks(data) {
             const links = [
-                { id: 'social-link-facebook', url: data.facebook },
-                { id: 'social-link-telegram', url: data.telegram },
-                { id: 'social-link-tiktok', url: data.tiktok }
+                { id: 'social-link-facebook', url: data.facebook, image: data.facebookImage, platform: 'facebook' },
+                { id: 'social-link-telegram', url: data.telegram, image: data.telegramImage, platform: 'telegram' },
+                { id: 'social-link-tiktok', url: data.tiktok, image: data.tiktokImage, platform: 'tiktok' }
             ];
             let anyVisible = false;
-            links.forEach(({ id, url }) => {
+            links.forEach(({ id, url, image, platform }) => {
                 const el = document.getElementById(id);
+                const iconEl = el.querySelector('.social-link-icon');
+                if (!(platform in socialDefaultIconHTML)) socialDefaultIconHTML[platform] = iconEl.innerHTML;
+                if (image) {
+                    iconEl.innerHTML = `<img src="${image}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+                } else {
+                    iconEl.innerHTML = socialDefaultIconHTML[platform];
+                }
                 if (url) {
                     el.href = url;
                     el.style.display = 'flex';
@@ -4206,7 +4831,7 @@
         }
 
         async function submitOrder(orderData, btnElement) {
-            const { gameName, serverRegion, amount, price, inGameId, inGameName, serverId, paymentMethodName, receiptFile, transactionId, g2bulkGameCode, g2bulkCatalogueName, jcplaysProduct, jcplaysProductId } = orderData;
+            const { gameName, serverRegion, amount, price, inGameId, inGameName, serverId, paymentMethodName, receiptFile, transactionId, g2bulkGameCode, g2bulkCatalogueName, jcplaysProduct, jcplaysProductId, g2bulkVoucherProductId } = orderData;
 
             const originalText = btnElement.innerText;
             btnElement.innerText = "Processing...";
@@ -4263,7 +4888,12 @@
                     // Code and the package was linked to a JCPlays Product ID in the
                     // game editor (see openGameEditor / saveGame). Both are needed to
                     // call JCPlays' createorder endpoint later.
-                    ...(jcplaysProduct && jcplaysProductId ? { jcplaysProduct, jcplaysProductId } : {})
+                    ...(jcplaysProduct && jcplaysProductId ? { jcplaysProduct, jcplaysProductId } : {}),
+                    // Voucher/giftcard packages - lets the admin panel route this
+                    // order through the G2Bulk purchase/delivery flow instead of
+                    // the game top-up order flow (see g2bulkVoucherProductId
+                    // handling in the admin panel's fulfillment code).
+                    ...(g2bulkVoucherProductId ? { g2bulkVoucherProductId } : {})
                 });
 
                 saveContact(inGameId, selectedGameId, serverId);
@@ -4289,7 +4919,7 @@
         // rendered) so two rapid orders can never both slip through on a
         // balance that only actually covers one of them.
         async function submitWalletOrder(orderData, btnElement) {
-            const { gameName, serverRegion, amount, price, inGameId, serverId, g2bulkGameCode, g2bulkCatalogueName, jcplaysProduct, jcplaysProductId } = orderData;
+            const { gameName, serverRegion, amount, price, inGameId, serverId, g2bulkGameCode, g2bulkCatalogueName, jcplaysProduct, jcplaysProductId, g2bulkVoucherProductId } = orderData;
 
             const originalText = btnElement.innerText;
             btnElement.innerText = "Processing...";
@@ -4339,7 +4969,8 @@
                     userPhone: (savedProfile.phone && savedProfile.phone.trim()) ? savedProfile.phone.trim() : '',
                     ...(location ? { location } : {}),
                     ...(g2bulkGameCode && g2bulkCatalogueName ? { g2bulkGameCode, g2bulkCatalogueName } : {}),
-                    ...(jcplaysProduct && jcplaysProductId ? { jcplaysProduct, jcplaysProductId } : {})
+                    ...(jcplaysProduct && jcplaysProductId ? { jcplaysProduct, jcplaysProductId } : {}),
+                    ...(g2bulkVoucherProductId ? { g2bulkVoucherProductId } : {})
                 });
 
                 saveContact(inGameId, selectedGameId, serverId);
@@ -4369,6 +5000,14 @@
                 const methods = {};
                 snap.forEach(docSnap => { methods[docSnap.id] = docSnap.data(); });
                 window.PAYMENT_METHODS = methods;
+                // Re-draw whichever payment-method list is on screen right now,
+                // so an admin re-ordering payment methods shows up immediately
+                // here too — instead of only on the next time the customer
+                // closes and reopens the payment section (or reloads the page).
+                const detailWrap = document.getElementById('detail-payment-methods-wrap');
+                if (detailWrap && detailWrap.style.display !== 'none') renderPaymentMethods();
+                const walletOverlay = document.getElementById('wallet-topup-overlay');
+                if (walletOverlay && walletOverlay.classList.contains('show')) renderWalletPaymentMethods();
             }, (error) => {
                 console.error("Payment methods listener error:", error);
             });
@@ -4742,7 +5381,7 @@
                 listHTML += historyOrderCardHTML(data, index);
             });
 
-            container.innerHTML = chipsHTML + listHTML;
+            container.innerHTML = chipsHTML + `<div class="order-list-scroll">${listHTML}</div>`;
         }
 
         function openOrderDetail(index) {
@@ -4776,10 +5415,11 @@
                 ? `<div class="od-row"><span>Server</span><b>${data.serverRegion}</b></div>`
                 : '';
             document.getElementById('order-detail-body').innerHTML = `
+                ${voucherCodeBlockHTML(data)}
                 <div style="display:flex;align-items:center;gap:12px;">
                     <div class="hc-thumb" style="width:52px;height:52px;">${gameImg ? `<img src="${gameImg}" alt="" onerror="this.style.display='none'">` : ''}</div>
                     <div style="flex:1;min-width:0;">
-                        <h4 style="font-size:17px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${data.game}</h4>
+                        <h4 style="font-size:17px;font-weight: 600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${data.game}</h4>
                         <p style="font-size:12px;color:var(--text-muted);margin-top:2px;">${dateStr}</p>
                     </div>
                     <span class="badge ${badgeClass}">${historyStatusIconHTML(data.status)}${data.status}</span>
@@ -5059,7 +5699,8 @@
 
             const customerRows = [
                 ['User', data.userName || '-', receiptTier],
-                ['In-Game Name', data.game || '-'],
+                ['Game', data.game || '-'],
+                ...(data.inGameName ? [['Player Name', data.inGameName]] : []),
                 ['In-Game ID', data.playerId || '-'],
                 ...(data.serverId ? [['Server ID', data.serverId]] : [])
             ];
@@ -5366,28 +6007,36 @@
         // Keeps History live: once attached, order status changes (Pending -> Processing
         // -> Success/Fail) made from the admin panel appear here automatically, with no
         // need to leave and reopen the History tab.
+        //
+        // Scoped by the device's guestId (the account identifier every order is
+        // stamped with), NOT by playerId. playerId is just "the last in-game ID
+        // typed into any game's order form" (see saveContact) - it gets overwritten
+        // every time the customer orders for a different game or a different
+        // account, so querying by it silently dropped older orders from History
+        // the moment a newer, different in-game ID was used. guestId is stable
+        // per device/account, so it doesn't have that problem.
         let historyUnsubscribe = null;
-        let historyListenerPlayerId = null;
+        let historyListenerGuestId = null;
 
         function loadHistory() {
             const container = document.getElementById('history-container');
-            const saved = getSavedContact();
+            const guestId = window.getGuestId ? window.getGuestId() : '';
 
-            if (!saved.playerId) {
-                if (historyUnsubscribe) { historyUnsubscribe(); historyUnsubscribe = null; historyListenerPlayerId = null; }
+            if (!guestId) {
+                if (historyUnsubscribe) { historyUnsubscribe(); historyUnsubscribe = null; historyListenerGuestId = null; }
                 container.innerHTML = emptyStateHTML('icon-history', 'No orders yet', 'Place a top up and your order history will show up here.');
                 return;
             }
 
-            // Already listening for this exact player - nothing to do, it's live.
-            if (historyUnsubscribe && historyListenerPlayerId === saved.playerId) return;
+            // Already listening for this exact account - nothing to do, it's live.
+            if (historyUnsubscribe && historyListenerGuestId === guestId) return;
 
             if (historyUnsubscribe) { historyUnsubscribe(); historyUnsubscribe = null; }
-            historyListenerPlayerId = saved.playerId;
+            historyListenerGuestId = guestId;
             HISTORY_FILTER_DATE = null;
             container.innerHTML = historySkeletonHTML();
 
-            const q = query(collection(db, "orders"), where("playerId", "==", saved.playerId));
+            const q = query(collection(db, "orders"), where("userId", "==", guestId));
             historyUnsubscribe = onSnapshot(q, (snap) => {
                 const orders = [];
                 snap.forEach(docSnap => orders.push({ id: docSnap.id, ...docSnap.data() }));
@@ -5531,6 +6180,7 @@
         function openGameEntry(idx) {
             const group = HOME_GAME_GROUPS[idx];
             if (!group) return;
+            gameDetailReturnPage = 'home';
             if (group.ids.length <= 1) {
                 openGameDetail(group.ids[0]);
             } else {
@@ -5539,16 +6189,18 @@
         }
         window.openGameEntry = openGameEntry;
 
-        function openServerSelect(idx) {
-            const group = HOME_GAME_GROUPS[idx];
+        let serverSelectReturnPage = 'home';
+        function openServerSelect(idx, groups = HOME_GAME_GROUPS) {
+            const group = groups[idx];
             if (!group) return;
+            serverSelectReturnPage = window.currentStorePage === 'voucher' ? 'voucher' : 'home';
             document.getElementById('server-select-title').innerText = group.name;
             const grid = document.getElementById('server-select-grid');
-            grid.innerHTML = group.ids.map(id => {
+            grid.innerHTML = group.ids.map((id, i) => {
                 const g = GAMES[id];
                 const label = g.serverName || g.name;
                 return `
-                    <div class="game-card" onclick="openGameDetail('${id}')">
+                    <div class="game-card game-card-anim" style="animation-delay:${Math.min(i * 25, 200)}ms" onclick="openGameDetail('${id}')">
                         <div class="game-card-img-wrap">
                             <img src="${g.image}" alt="${label}" loading="lazy" decoding="async">
                         </div>
@@ -5556,14 +6208,90 @@
                     </div>
                 `;
             }).join('');
+            revealCardsIn(grid);
             showPage('server-select');
         }
         window.openServerSelect = openServerSelect;
 
         function closeServerSelect() {
-            showPage('home');
+            showPage(serverSelectReturnPage);
         }
         window.closeServerSelect = closeServerSelect;
+
+        // Scroll-reveal for .game-card-anim elements: instead of every card
+        // animating in the instant it's rendered, each card stays invisible
+        // until it actually scrolls into view, then plays the entrance
+        // animation - so dragging the page up/down reveals cards one by one.
+        const cardRevealObserver = ('IntersectionObserver' in window)
+            ? new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        cardRevealObserver.unobserve(entry.target);
+                    }
+                });
+            }, { root: null, rootMargin: '0px 0px 15% 0px', threshold: 0.01 })
+            : null;
+
+        function revealCardsIn(container) {
+            if (!container) return;
+            const cards = container.querySelectorAll('.game-card-anim:not(.in-view)');
+            if (!cardRevealObserver) {
+                // No IntersectionObserver support - just show them.
+                cards.forEach(el => el.classList.add('in-view'));
+                return;
+            }
+            cards.forEach(el => cardRevealObserver.observe(el));
+        }
+        window.revealCardsIn = revealCardsIn;
+
+        // Popular Games row: slow automatic left-right-left scrolling.
+        // Pauses while the user is touching/scrolling it themselves, then
+        // resumes a couple seconds after they let go. Also fully skips its
+        // work whenever Home isn't the active page or the row is off-screen —
+        // previously this rAF loop ran forever in the background even while
+        // the user was scrolling History/Notifications/etc, competing for
+        // main-thread time and making those lists feel stuck.
+        (function initPopularAutoScroll() {
+            const el = document.getElementById('popular-games-scroll');
+            if (!el) return;
+            let dir = 1;          // 1 = scrolling right, -1 = scrolling left
+            let paused = false;
+            let resumeTimer = null;
+            let rowVisible = false;
+            const SPEED = 0.4;    // px per frame (~24px/sec) — slow drift
+
+            const visibilityObserver = ('IntersectionObserver' in window)
+                ? new IntersectionObserver((entries) => {
+                    entries.forEach(entry => { rowVisible = entry.isIntersecting; });
+                }, { threshold: 0.01 })
+                : null;
+            if (visibilityObserver) visibilityObserver.observe(el);
+            else rowVisible = true; // no IntersectionObserver support — fall back to always-on
+
+            function step() {
+                const onHome = window.currentStorePage === 'home' || !window.currentStorePage;
+                if (!paused && onHome && rowVisible) {
+                    const max = el.scrollWidth - el.clientWidth;
+                    if (max > 0) {
+                        el.scrollLeft += dir * SPEED;
+                        if (el.scrollLeft >= max - 1) dir = -1;
+                        else if (el.scrollLeft <= 1) dir = 1;
+                    }
+                }
+                requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+
+            function pauseThenResume() {
+                paused = true;
+                clearTimeout(resumeTimer);
+                resumeTimer = setTimeout(() => { paused = false; }, 2500);
+            }
+            ['pointerdown', 'touchstart', 'wheel'].forEach(evt => {
+                el.addEventListener(evt, pauseThenResume, { passive: true });
+            });
+        })();
 
         function renderHomeGames() {
             const popularSection = document.getElementById('popular-games-section');
@@ -5572,7 +6300,10 @@
             // Explicit `order` field (set from the admin's manual Reorder
             // screen) wins, ascending; games that don't have one yet fall to
             // the end, alphabetically - so nothing reshuffles on its own.
-            const ids = Object.keys(GAMES).sort((a, b) => {
+            // Vouchers/gift cards (fulfillProvider === 'g2bulk_voucher') have their
+            // own dedicated Voucher tab (see renderVoucherGames below) and should
+            // not also appear mixed into the Home / direct top-up list.
+            const ids = Object.keys(GAMES).filter(id => GAMES[id].fulfillProvider !== 'g2bulk_voucher').sort((a, b) => {
                 const ga = GAMES[a], gb = GAMES[b];
                 const oa = typeof ga.order === 'number' ? ga.order : Infinity;
                 const ob = typeof gb.order === 'number' ? gb.order : Infinity;
@@ -5600,10 +6331,10 @@
             const popularGroups = gameSearchQuery ? [] : indexedGroups.filter(gr => gr.ids.some(id => GAMES[id].popular));
             if (popularGroups.length > 0) {
                 popularSection.style.display = 'block';
-                popularScroll.innerHTML = popularGroups.map(gr => {
+                popularScroll.innerHTML = popularGroups.map((gr, i) => {
                     const g = GAMES[gr.repId];
                     return `
-                        <div class="game-card popular-card" onclick="openGameEntry(${gr.idx})">
+                        <div class="game-card popular-card game-card-anim" style="animation-delay:${Math.min(i * 25, 200)}ms" onclick="openGameEntry(${gr.idx})">
                             <div class="game-card-img-wrap">
                                 <img src="${g.image}" alt="${g.name}" loading="lazy" decoding="async">
                                 ${categoryBadgeHtml(g.category)}
@@ -5612,6 +6343,7 @@
                         </div>
                     `;
                 }).join('');
+                revealCardsIn(popularScroll);
             } else {
                 popularSection.style.display = 'none';
                 popularScroll.innerHTML = '';
@@ -5632,10 +6364,10 @@
                     : `<p class="empty-msg">No games in this category yet.</p>`;
                 return;
             }
-            grid.innerHTML = visibleGroups.map(gr => {
+            grid.innerHTML = visibleGroups.map((gr, i) => {
                 const g = GAMES[gr.repId];
                 return `
-                    <div class="game-card" onclick="openGameEntry(${gr.idx})">
+                    <div class="game-card game-card-anim" style="animation-delay:${Math.min(i * 25, 200)}ms" onclick="openGameEntry(${gr.idx})">
                         <div class="game-card-img-wrap">
                             <img src="${g.image}" alt="${g.name}" loading="lazy" decoding="async">
                             ${categoryBadgeHtml(g.category)}
@@ -5644,8 +6376,61 @@
                     </div>
                 `;
             }).join('');
+            revealCardsIn(grid);
         }
 
+        // ---------- Voucher tab: same card grid / purchase flow as Home,
+        // pre-filtered to games whose packages are fulfilled via G2Bulk's
+        // Giftcards & Vouchers catalogue (fulfillProvider === 'g2bulk_voucher',
+        // set from the "Vouchers" tab in the admin game editor). Kept as its
+        // own group/index array (VOUCHER_GAME_GROUPS) so opening a card here
+        // never collides with Home's HOME_GAME_GROUPS indices.
+        let VOUCHER_GAME_GROUPS = [];
+        function openVoucherGameEntry(idx) {
+            const group = VOUCHER_GAME_GROUPS[idx];
+            if (!group) return;
+            gameDetailReturnPage = 'voucher';
+            if (group.ids.length <= 1) {
+                openGameDetail(group.ids[0]);
+            } else {
+                openServerSelect(idx, VOUCHER_GAME_GROUPS);
+            }
+        }
+        window.openVoucherGameEntry = openVoucherGameEntry;
+
+        function renderVoucherGames() {
+            const grid = document.getElementById('voucher-games-grid');
+            if (!grid) return;
+            const ids = Object.keys(GAMES)
+                .filter(id => GAMES[id].fulfillProvider === 'g2bulk_voucher')
+                .sort((a, b) => {
+                    const ga = GAMES[a], gb = GAMES[b];
+                    const oa = typeof ga.order === 'number' ? ga.order : Infinity;
+                    const ob = typeof gb.order === 'number' ? gb.order : Infinity;
+                    if (oa !== ob) return oa - ob;
+                    return (ga.name || '').localeCompare(gb.name || '');
+                });
+            if (ids.length === 0) {
+                grid.innerHTML = emptyStateHTML('icon-gift', 'No vouchers yet', 'Gift cards & vouchers will show up here once added.');
+                return;
+            }
+            const groups = groupGamesByName(ids);
+            VOUCHER_GAME_GROUPS = groups;
+            grid.innerHTML = groups.map((gr, i) => {
+                const g = GAMES[gr.repId];
+                return `
+                    <div class="game-card game-card-anim" style="animation-delay:${Math.min(i * 25, 200)}ms" onclick="openVoucherGameEntry(${i})">
+                        <div class="game-card-img-wrap">
+                            <img src="${g.image}" alt="${g.name}" loading="lazy" decoding="async">
+                            ${categoryBadgeHtml(g.category)}
+                        </div>
+                        <div class="game-card-name">${g.name}</div>
+                    </div>
+                `;
+            }).join('');
+            revealCardsIn(grid);
+        }
+        window.renderVoucherGames = renderVoucherGames;
 
         // Games are managed entirely from the admin panel now — nothing here ever
         // auto-recreates a game, so deleting one in admin removes it for good.
@@ -5656,6 +6441,7 @@
                 GAMES = newGames;
                 window.GAMES = GAMES;
                 renderHomeGames();
+                if (window.currentStorePage === 'voucher') renderVoucherGames();
                 if (historyUnsubscribe) renderHistoryOrders(HISTORY_ORDERS);
             }, (error) => {
                 console.error("Games listener error:", error);
@@ -5668,6 +6454,7 @@
         // ---------- Notifications (broadcast messages from admin) ----------
         let NOTIFICATIONS = [];
         let notifListenerAttached = false;
+        let notifReturnPage = 'home';
 
         function getLastSeenNotifTime() {
             try { return Number(localStorage.getItem('gz_last_seen_notif')) || 0; }
@@ -5749,15 +6536,22 @@
         window.togglePushNotifications = togglePushNotifications;
         window.renderPushToggleUI = renderPushToggleUI;
 
+        // A notification only has a full-detail page if the admin actually
+        // wrote details (or, for older entries, the old single "message"
+        // field). Without that there's nothing to show, so it isn't tappable.
+        function notifHasDetails(n) {
+            return !!((n.details && n.details.trim()) || (n.message && n.message.trim()));
+        }
+
         function fireOsNotification(n) {
             if (!pushEnabled()) return;
             try {
                 const notif = new Notification(n.title || 'PCA Store', {
-                    body: n.message || '',
+                    body: n.intro || n.message || '',
                     icon: APP_LOGO_URL || undefined,
                     tag: 'gz-notif-' + (n.timestamp?.toMillis() || Date.now()) // avoid duplicate stacking
                 });
-                notif.onclick = () => { window.focus(); openNotificationsModal(); notif.close(); };
+                notif.onclick = () => { window.focus(); if (notifHasDetails(n)) openNotificationDetail(n.id); else openNotificationsPage(); notif.close(); };
             } catch (e) { console.error('Notification display error:', e); }
         }
 
@@ -5767,14 +6561,15 @@
             const q = query(collection(db, "notifications"), orderBy("timestamp", "desc"));
             let initialLoad = true;
             onSnapshot(q, (snap) => {
-                NOTIFICATIONS = snap.docs.map(d => d.data());
+                NOTIFICATIONS = snap.docs.map(d => ({ id: d.id, ...d.data() }));
                 updateNotifDot();
+                if (window.currentStorePage === 'notif-page') renderNotificationList();
                 // Only the *first* snapshot is existing history — skip firing OS
                 // notifications for it. Every "added" change after that is a
                 // genuinely new admin broadcast that just came in live.
                 if (!initialLoad) {
                     snap.docChanges().forEach(change => {
-                        if (change.type === 'added') fireOsNotification(change.doc.data());
+                        if (change.type === 'added') fireOsNotification({ id: change.doc.id, ...change.doc.data() });
                     });
                 }
                 initialLoad = false;
@@ -5783,34 +6578,66 @@
             });
         }
 
-        function renderNotificationsModal() {
-            const list = document.getElementById('notif-modal-list');
+        // Notification list: only title + a short intro. Tap a card to open
+        // the full details as its own page (see openNotificationDetail) — but
+        // only if the admin wrote details; otherwise the card isn't tappable.
+        function renderNotificationList() {
+            const list = document.getElementById('notif-page-list');
+            if (!list) return;
             if (NOTIFICATIONS.length === 0) {
-                list.innerHTML = '<p class="empty-msg">No notifications yet.</p>';
+                list.innerHTML = emptyStateHTML('icon-bell', 'No notifications yet', 'Announcements from the team will show up here.');
                 return;
             }
             list.innerHTML = NOTIFICATIONS.map(n => {
                 const dateStr = n.timestamp ? n.timestamp.toDate().toLocaleString() : 'Just now';
+                const preview = n.intro || n.message || '';
+                const openable = notifHasDetails(n);
+                const clickAttrs = openable
+                    ? `onclick="openNotificationDetail('${n.id}')" style="cursor:pointer;"`
+                    : `style="cursor:default;"`;
                 return `
-                    <div class="notif-item">
-                        <h5>${n.title}</h5>
-                        <p>${n.message}</p>
+                    <div class="notif-item" ${clickAttrs}>
+                        <h5>${n.title || ''}</h5>
+                        <p>${preview}</p>
                         <span>${dateStr}</span>
                     </div>
                 `;
             }).join('');
         }
 
-        function openNotificationsModal() {
-            renderNotificationsModal();
-            document.getElementById('notif-modal-overlay').classList.add('show');
+        // Opens the notifications list as a real page (not a bottom sheet).
+        // Remembers whichever page the user was on so the back arrow returns
+        // them there instead of always going Home.
+        function openNotificationsPage() {
+            if (window.currentStorePage && window.currentStorePage !== 'notif-page' && window.currentStorePage !== 'notif-detail') {
+                notifReturnPage = window.currentStorePage;
+            }
+            renderNotificationList();
+            showPage('notif-page');
             const latest = NOTIFICATIONS.reduce((max, n) => Math.max(max, n.timestamp?.toMillis() || 0), 0);
             if (latest > 0) setLastSeenNotifTime(latest);
             document.getElementById('notif-dot').classList.remove('show');
         }
 
-        function closeNotificationsModal() {
-            document.getElementById('notif-modal-overlay').classList.remove('show');
+        function closeNotificationsPage() {
+            showPage(notifReturnPage || 'home');
+        }
+
+        // Full-detail page for a single notification: title, intro, and the
+        // complete details text, reached by tapping a card in the list.
+        // Guarded again here in case something (e.g. an OS notification click)
+        // tries to open one that has no details.
+        function openNotificationDetail(id) {
+            const n = NOTIFICATIONS.find(x => x.id === id);
+            if (!n || !notifHasDetails(n)) return;
+            document.getElementById('notif-detail-title').textContent = n.title || 'Notification';
+            document.getElementById('notif-detail-date').textContent = n.timestamp ? n.timestamp.toDate().toLocaleString() : 'Just now';
+            document.getElementById('notif-detail-body').textContent = n.details || n.message || n.intro || '';
+            showPage('notif-detail');
+        }
+
+        function closeNotificationDetail() {
+            showPage('notif-page');
         }
 
         // ---------- Dark / Light theme toggle ----------
@@ -5903,8 +6730,10 @@
         renderTierPreviewGrid();
         renderPushToggleUI();
 
-        window.openNotificationsModal = openNotificationsModal;
-        window.closeNotificationsModal = closeNotificationsModal;
+        window.openNotificationsPage = openNotificationsPage;
+        window.closeNotificationsPage = closeNotificationsPage;
+        window.openNotificationDetail = openNotificationDetail;
+        window.closeNotificationDetail = closeNotificationDetail;
         window.getSavedContact = getSavedContact;
         window.submitOrder = submitOrder;
         window.loadHistory = loadHistory;
