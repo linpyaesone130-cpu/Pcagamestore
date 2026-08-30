@@ -99,6 +99,7 @@
         html[data-theme="dark"] .mini-profile-bar:active { background: rgba(76,147,255,0.1); }
         html[data-theme="dark"] .lb-you-row { background: rgba(76,147,255,0.1); }
         html[data-theme="dark"] .detail-form-card input[type="text"]:focus,
+        html[data-theme="dark"] .detail-form-card select:focus,
         html[data-theme="dark"] .profile-edit-field input[type="text"]:focus,
         html[data-theme="dark"] .wallet-topup-amount-input:focus { background: rgba(76,147,255,0.1); }
         html, body { transition: background-color 0.35s ease, color 0.35s ease; }
@@ -971,6 +972,16 @@
         .detail-form-card label:first-child { margin-top: 0; }
         .detail-form-card input[type="text"] { padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 9px; font-size: 13.5px; margin-top: 6px; transition: 0.15s; width: 100%; }
         .detail-form-card input[type="text"]:focus { outline: none; border-color: var(--accent); background: #F8FBFF; }
+        .detail-form-card select {
+            padding: 10px 38px 10px 12px; border: 1.5px solid var(--border); border-radius: 9px; font-size: 13.5px;
+            margin-top: 6px; transition: 0.15s; width: 100%; color: var(--text); cursor: pointer;
+            -webkit-appearance: none; -moz-appearance: none; appearance: none;
+            background: var(--surface) url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239C9EA1' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 12px center / 15px 15px;
+        }
+        .detail-form-card select.has-value { border-color: var(--accent); font-weight: 600; }
+        .detail-form-card select:hover { border-color: var(--accent); }
+        .detail-form-card select:focus { outline: none; border-color: var(--accent); background-color: var(--accent-soft); box-shadow: 0 0 0 3px var(--accent-soft); }
+        .detail-form-card select option { color: #050505; background: #ffffff; font-weight: 400; }
         .detail-form-card input[type="file"] { font-size: 13px; }
 
         /* Edit Profile modal: Name/Phone as a small 2-column grid box instead
@@ -2091,6 +2102,58 @@
         </div>
         <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 
+        <!-- ALUU.IN CRYPTO WALLET TOP UP MODAL: independent lane from the
+             FazerCards crypto modal above — separate state, separate
+             Worker, separate everything. Only one network (USDT/BEP20), so
+             there's no method-picker stage: opening it creates the order
+             immediately and jumps straight to the invoice. -->
+        <div class="modal-overlay" id="wallet-aluu-overlay" onclick="if(event.target===this) closeAluuTopupModal()">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <h3>Top Up with USDT</h3>
+                    <div class="modal-close" onclick="closeAluuTopupModal()">
+                        <svg class="ui-icon" style="width:18px;height:18px;"><use href="#icon-close"></use></svg>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div id="aluu-topup-stage-loading">
+                        <p class="empty-msg">Creating your payment address…</p>
+                    </div>
+
+                    <div id="aluu-topup-stage-invoice" style="display:none;">
+                        <div class="wallet-pay-info-card">
+                            <p class="wallet-pay-info-label">Send exactly</p>
+                            <div class="pm-info-box-row">
+                                <p id="aluu-pm-amount" style="font-weight:700;font-size:17px;"></p>
+                                <button type="button" class="pm-copy-btn" onclick="copyPaymentField('aluu-pm-amount', this)" title="Copy amount">
+                                    <svg class="ui-icon"><use href="#icon-copy"></use></svg>
+                                </button>
+                            </div>
+                            <p class="wallet-pay-info-label" style="margin-top:10px;">To this address</p>
+                            <div class="pm-info-box-row">
+                                <p id="aluu-pm-address" style="word-break:break-all;font-size:13px;"></p>
+                                <button type="button" class="pm-copy-btn" onclick="copyPaymentField('aluu-pm-address', this)" title="Copy address">
+                                    <svg class="ui-icon"><use href="#icon-copy"></use></svg>
+                                </button>
+                            </div>
+                            <p id="aluu-pm-network-line" style="font-size:12.5px;color:var(--text-secondary);margin-top:10px;"></p>
+                            <p id="aluu-pm-expires-line" style="font-size:12.5px;color:var(--text-secondary);margin-top:4px;"></p>
+                        </div>
+
+                        <label style="display:block;font-size:13px;font-weight:600;color:var(--text);margin:14px 0 6px;">Transaction Hash</label>
+                        <input type="text" id="aluu-tx-hash-input" class="wallet-topup-amount-input" style="font-size:13.5px;" placeholder="Paste the tx hash after sending">
+                        <button type="button" class="btn btn-primary" style="width:100%;margin-top:8px;" id="aluu-submit-tx-btn" onclick="submitAluuTxHash()">Submit for Verification</button>
+
+                        <div id="aluu-status-box" style="display:none;margin-top:16px;text-align:center;font-size:13.5px;color:var(--text-secondary);">
+                            <span id="aluu-status-spinner" style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.25);border-top-color:var(--primary,#8b5cf6);border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:-2px;margin-right:6px;"></span>
+                            <span id="aluu-status-text">Waiting for payment…</span>
+                        </div>
+                        <button type="button" class="btn" style="width:100%;margin-top:14px;" onclick="closeAluuTopupModal()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- WALLET TOP UP DETAIL MODAL: tap a history row to see its full status -->
         <div class="modal-overlay" id="wallet-topup-detail-overlay" onclick="if(event.target===this) closeWalletTopupDetail()">
             <div class="modal-box">
@@ -2746,6 +2809,11 @@
         // { valid, playerName, region } result. See fazercards-functions
         // worker.js.
         const FAZERCARD_VALIDATE_URL = 'https://fazercards-functions.pca-game-store.workers.dev/fazercard-validate';
+        // Aluu.in Player ID check, same key-never-reaches-the-browser pattern
+        // as FAZERCARD_VALIDATE_URL above - the real Aluu.in API key stays
+        // server-side as the aluu-functions Worker's ALUU_API_KEY secret.
+        // See the /aluu-id-check route in aluu-worker.js.
+        const ALUU_ID_CHECK_URL = 'https://aluu-functions.pca-game-store.workers.dev/aluu-id-check';
         let selectedGameServerName = '';
 
         // Shown for any package that doesn't have an admin-uploaded image, so the
@@ -2790,6 +2858,13 @@
         // G2Bulk's public checkPlayerId purely to show the player's name.
         // The order still fulfills through FazerCards either way.
         let selectedGameG2BulkIdCheckCode = null;
+        // Aluu.in game code for the currently-open game, if it's linked as an
+        // Aluu.in-fulfilled game (see game.aluuCode in admin.html). Drives the
+        // Confirm ID button the same way selectedGameG2BulkCode /
+        // selectedGameFazerCardCategory do below - the actual check runs
+        // through ALUU_ID_CHECK_URL so the real Aluu.in API key never reaches
+        // this page.
+        let selectedGameAluuCode = null;
         let selectedPaymentMethod = null;
         let editingReceiptFile = null;
         let receiptOcrPromise = null; // resolves once auto-detection of the Transaction ID from the uploaded receipt finishes
@@ -2804,7 +2879,9 @@
             // never auto-fills or shows up as a "recent" suggestion on another game.
             const saved = window.getSavedContactForGame ? window.getSavedContactForGame(selectedGameId) : { playerId: '', serverId: '' };
             document.getElementById('detail-ingame-id').value = saved.playerId || '';
-            document.getElementById('detail-server-id').value = saved.serverId || '';
+            const serverField = document.getElementById('detail-server-id');
+            serverField.value = saved.serverId || '';
+            if (serverField.tagName === 'SELECT') serverField.classList.toggle('has-value', !!serverField.value);
             if (window.renderRecentIds) window.renderRecentIds(selectedGameId);
             onPlayerIdFieldChange();
         }
@@ -2820,6 +2897,7 @@
             const match = idField.value.match(/\(([^)]+)\)/);
             if (!match) return;
             const serverIdField = document.getElementById('detail-server-id');
+            if (serverIdField.tagName === 'SELECT') return; // region picker - a pasted numeric code has no matching option
             serverIdField.value = match[1].trim();
             idField.value = idField.value.replace(/\s*\([^)]*\)\s*/, '').trim();
         }
@@ -2835,7 +2913,7 @@
             verifiedPlayerName = null;
             clearTimeout(playerIdCheckTimer);
 
-            if (!selectedGameG2BulkCode && !selectedGameFazerCardCategory) { statusEl.style.display = 'none'; confirmBtn.style.display = 'none'; return; }
+            if (!selectedGameG2BulkCode && !selectedGameFazerCardCategory && !selectedGameAluuCode) { statusEl.style.display = 'none'; confirmBtn.style.display = 'none'; return; }
 
             const playerId = document.getElementById('detail-ingame-id').value.trim();
             if (!playerId) { statusEl.style.display = 'none'; confirmBtn.style.display = 'none'; return; }
@@ -2936,7 +3014,7 @@
             const playerId = document.getElementById('detail-ingame-id').value.trim();
             const serverId = document.getElementById('detail-server-id').value.trim();
 
-            if ((!selectedGameG2BulkCode && !selectedGameFazerCardCategory) || !playerId) return;
+            if ((!selectedGameG2BulkCode && !selectedGameFazerCardCategory && !selectedGameAluuCode) || !playerId) return;
 
             // FazerCards categories that need a zone/server field can't be
             // checked until that field is filled in too — an incomplete
@@ -2973,7 +3051,7 @@
                     if (!res.ok) outcome = 'unknown';
                     else if (data.valid === 'valid') { outcome = 'valid'; resolvedName = data.name || null; }
                     else outcome = 'invalid';
-                } else {
+                } else if (selectedGameFazerCardCategory) {
                     // fields keys mirror placeFazerCardOrder's mapping in
                     // admin.html: a server/zone-looking key gets the Server ID
                     // input, everything else gets the in-game ID input.
@@ -3017,6 +3095,19 @@
                             // stays 'unknown' — handled the same as below
                         }
                     }
+                } else {
+                    // Aluu.in check, proxied through ALUU_ID_CHECK_URL so the
+                    // real Aluu.in API key stays server-side (see
+                    // /aluu-id-check in aluu-worker.js) - this page only ever
+                    // sees back { valid, name }, never the raw Aluu.in
+                    // response or the key itself.
+                    const res = await fetch(
+                        `${ALUU_ID_CHECK_URL}?gameCode=${encodeURIComponent(selectedGameAluuCode)}&playerId=${encodeURIComponent(playerId)}&serverId=${encodeURIComponent(serverId || '')}`
+                    );
+                    const data = await res.json();
+                    if (!res.ok) outcome = 'unknown';
+                    else if (data.valid === true) { outcome = 'valid'; resolvedName = data.name || null; }
+                    else outcome = 'invalid';
                 }
 
                 if (outcome === 'valid') {
@@ -3115,6 +3206,49 @@
         }
         window.toggleGameDescExpand = toggleGameDescExpand;
 
+        // Server ID field renders as either a free-text <input> (the default)
+        // or a <select> populated from a provider's server-options list, for
+        // games where the customer must pick a region/server from a fixed
+        // list rather than type a code they'd have no way to know (MLBB's
+        // os_asia/os_euro/os_cht/os_usa, PUBGM/Free Fire region splits, etc.
+        // — the same pattern G2Bulk, FazerCard and Aluu.in's own storefronts
+        // use). Any of the three providers can drive select mode; whichever
+        // one supplies a non-empty options array wins:
+        //   Aluu.in    -> game.aluuServerMode === 'select'      + game.aluuServerOptions
+        //   FazerCard  -> game.fazercardServerMode === 'select' + game.fazercardServerOptions
+        //   G2Bulk     -> game.g2bulkServerMode === 'select'    + game.g2bulkServerOptions
+        // Each options array is [{value, label}], saved onto the game doc by
+        // that provider's catalogue-import step in admin.html (same shape
+        // Aluu.in's GET /server-options already returns today).
+        // Rebuilds the actual DOM node under the same id rather than toggling
+        // two separate elements, so every existing
+        // getElementById('detail-server-id').value read/write elsewhere in
+        // this file keeps working unchanged for both field types.
+        function renderServerIdField(game) {
+            const old = document.getElementById('detail-server-id');
+            const providerOptions = game && (
+                (game.aluuServerMode === 'select' && game.aluuServerOptions) ||
+                (game.fazercardServerMode === 'select' && game.fazercardServerOptions) ||
+                (game.g2bulkServerMode === 'select' && game.g2bulkServerOptions)
+            );
+            const useSelect = Array.isArray(providerOptions) && providerOptions.length > 0;
+            let el;
+            if (useSelect) {
+                el = document.createElement('select');
+                el.innerHTML = '<option value="">Select server / region</option>'
+                    + providerOptions.map(o => `<option value="${escapeHtml(String(o.value))}">${escapeHtml(String(o.label || o.value))}</option>`).join('');
+                el.addEventListener('change', () => el.classList.toggle('has-value', !!el.value));
+            } else {
+                el = document.createElement('input');
+                el.type = 'text';
+                el.placeholder = 'Server ID';
+            }
+            el.id = 'detail-server-id';
+            el.setAttribute('oninput', 'onPlayerIdFieldChange()');
+            el.setAttribute('onchange', 'onPlayerIdFieldChange()');
+            old.replaceWith(el);
+        }
+
         function openGameDetail(gameId) {
             const game = window.GAMES ? window.GAMES[gameId] : null;
             if (!game) return;
@@ -3127,6 +3261,7 @@
             selectedGameFazerCardGiftCategory = game.fazercardGiftCategoryId || null;
             selectedGameFazerCardFields = (Array.isArray(game.fazercardFields) && game.fazercardFields.length) ? game.fazercardFields : ['player_id'];
             selectedGameG2BulkIdCheckCode = game.g2bulkIdCheckCode || null;
+            selectedGameAluuCode = game.aluuCode || null;
             selectedPackage = null;
 
             // Voucher/coupon-style games deliver a code rather than crediting a
@@ -3143,6 +3278,7 @@
             const needsServerId = needsPlayerId && game.serverIdRequired !== false;
             const serverIdWrap = document.getElementById('detail-server-id-wrap');
             serverIdWrap.style.display = needsServerId ? 'block' : 'none';
+            renderServerIdField(game);
             if (!needsServerId) document.getElementById('detail-server-id').value = '';
             playerIdVerified = null;
             document.getElementById('detail-id-status').style.display = 'none';
@@ -4523,6 +4659,7 @@
         function closeWalletTopupModal() {
             document.getElementById('wallet-topup-overlay').classList.remove('show');
             if (window.stopCryptoPolling) window.stopCryptoPolling();
+            if (window.stopAluuPolling) window.stopAluuPolling();
         }
         window.closeWalletTopupModal = closeWalletTopupModal;
 
@@ -4557,8 +4694,16 @@
                     <span class="payment-option-name">Pay with Crypto (auto top-up)</span>
                 </div>
             `;
+            // Independent from the FazerCards crypto card above - its own
+            // button, its own modal, its own Worker. See aluu-crypto-worker.js.
+            const aluuCard = `
+                <div class="payment-option" data-wallet-payment-id="__aluu_usdt__" onclick="openAluuTopupModal()">
+                    <div class="payment-option-icon"><svg class="ui-icon" style="width:20px;"><use href="#icon-wallet"></use></svg></div>
+                    <span class="payment-option-name">Pay with USDT (Aluu.in, auto top-up)</span>
+                </div>
+            `;
             if (ids.length === 0) {
-                container.innerHTML = cryptoCard + '<p class="empty-msg">No manual payment methods configured yet.</p>';
+                container.innerHTML = cryptoCard + aluuCard + '<p class="empty-msg">No manual payment methods configured yet.</p>';
                 return;
             }
             container.innerHTML = ids.map(id => {
@@ -4569,7 +4714,7 @@
                         <span class="payment-option-name">${p.name}</span>
                     </div>
                 `;
-            }).join('') + cryptoCard;
+            }).join('') + cryptoCard + aluuCard;
         }
 
         function selectWalletPaymentMethod(id) {
@@ -4805,6 +4950,124 @@
             }
         }
         window.verifyBinancePayment = verifyBinancePayment;
+
+        // ---------- Crypto top-up (Aluu.in-powered, auto-credited) ----------
+        // Deliberately independent from the FazerCards crypto block above:
+        // own Worker, own endpoints, own state variables, own modal. See
+        // aluu-crypto-worker.js for what each route does.
+        const ALUU_CRYPTO_CREATE_URL = 'https://aluu-crypto-worker.pca-game-store.workers.dev/create-order';
+        const ALUU_CRYPTO_VERIFY_URL = 'https://aluu-crypto-worker.pca-game-store.workers.dev/verify-tx';
+
+        let aluuActiveTopupId = null;
+        let aluuPollTimer = null;
+
+        async function openAluuTopupModal() {
+            const amount = Number(document.getElementById('wallet-topup-amount').value);
+            if (!amount || amount <= 0) { window.showToast('Please enter an amount first.', 'fail'); return; }
+            const guestId = window.getGuestId ? window.getGuestId() : null;
+            if (!guestId) { window.showToast('Could not identify your account. Please reload.', 'fail'); return; }
+
+            document.getElementById('aluu-topup-stage-loading').style.display = 'block';
+            document.getElementById('aluu-topup-stage-invoice').style.display = 'none';
+            document.getElementById('aluu-status-box').style.display = 'none';
+            document.getElementById('aluu-tx-hash-input').value = '';
+            document.getElementById('wallet-aluu-overlay').classList.add('show');
+
+            try {
+                const savedProfile = window.getSavedProfile ? window.getSavedProfile() : {};
+                const res = await fetch(ALUU_CRYPTO_CREATE_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: guestId,
+                        userName: (savedProfile.name && savedProfile.name.trim()) || guestId,
+                        amountMMK: amount
+                    })
+                });
+                const data = await res.json();
+                if (!data.ok) throw new Error(data.error || 'Could not create payment.');
+                showAluuInvoice(data.topupId, data.payment);
+            } catch (error) {
+                console.error('openAluuTopupModal error:', error);
+                window.showToast(error.message || 'Could not create payment.', 'fail');
+                closeAluuTopupModal();
+            }
+        }
+        window.openAluuTopupModal = openAluuTopupModal;
+
+        function closeAluuTopupModal() {
+            document.getElementById('wallet-aluu-overlay').classList.remove('show');
+            stopAluuPolling();
+            aluuActiveTopupId = null;
+        }
+        window.closeAluuTopupModal = closeAluuTopupModal;
+
+        function showAluuInvoice(topupId, payment) {
+            aluuActiveTopupId = topupId;
+            document.getElementById('aluu-topup-stage-loading').style.display = 'none';
+            document.getElementById('aluu-topup-stage-invoice').style.display = 'block';
+            document.getElementById('aluu-pm-amount').innerText = `${payment.amountUsdt} USDT`;
+            document.getElementById('aluu-pm-address').innerText = payment.address || '';
+            document.getElementById('aluu-pm-network-line').innerText = `Network: ${payment.currency || 'USDT'} (${payment.network || 'BEP20'}) — send the EXACT amount`;
+            document.getElementById('aluu-pm-expires-line').innerText = payment.expiresAt
+                ? `Expires: ${new Date(payment.expiresAt).toLocaleString()}` : '';
+        }
+
+        function setAluuStatus(text, spinning) {
+            document.getElementById('aluu-status-box').style.display = 'block';
+            document.getElementById('aluu-status-text').innerText = text;
+            document.getElementById('aluu-status-spinner').style.display = spinning ? 'inline-block' : 'none';
+        }
+
+        async function submitAluuTxHash() {
+            const txHash = document.getElementById('aluu-tx-hash-input').value.trim();
+            if (!txHash || !aluuActiveTopupId) { window.showToast('Paste your transaction hash first.', 'fail'); return; }
+            const btn = document.getElementById('aluu-submit-tx-btn');
+            btn.disabled = true;
+            setAluuStatus('Verifying with Aluu.in…', true);
+            try {
+                await pollAluuVerify(txHash);
+                aluuPollTimer = setInterval(() => pollAluuVerify(txHash), 6000);
+            } finally {
+                btn.disabled = false;
+            }
+        }
+        window.submitAluuTxHash = submitAluuTxHash;
+
+        async function pollAluuVerify(txHash) {
+            if (!aluuActiveTopupId) return;
+            try {
+                const res = await fetch(ALUU_CRYPTO_VERIFY_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ topupId: aluuActiveTopupId, txHash })
+                });
+                const data = await res.json();
+                if (!data.ok) { setAluuStatus(data.error || 'Checking…', true); return; }
+                if (data.status === 'Completed') {
+                    stopAluuPolling();
+                    setAluuStatus(`Wallet credited ${Number(data.amount || 0).toLocaleString()} MMK ✓`, false);
+                    window.showToast('Top up complete! Wallet credited.', 'success');
+                    setTimeout(() => { closeAluuTopupModal(); if (window.closeWalletTopupModal) window.closeWalletTopupModal(); }, 1500);
+                } else if (data.status === 'Rejected') {
+                    stopAluuPolling();
+                    setAluuStatus(data.error || 'Payment could not be verified.', false);
+                } else if (data.status === 'Confirming') {
+                    const req = data.required ? `/${data.required}` : '';
+                    setAluuStatus(`Waiting for confirmations… (${data.confirmations || 0}${req})`, true);
+                } else {
+                    setAluuStatus('Waiting for payment…', true);
+                }
+            } catch (error) {
+                console.error('aluu verify poll error:', error);
+                setAluuStatus('Connection issue — retrying…', true);
+            }
+        }
+
+        function stopAluuPolling() {
+            if (aluuPollTimer) { clearInterval(aluuPollTimer); aluuPollTimer = null; }
+        }
+        window.stopAluuPolling = stopAluuPolling;
 
         function previewWalletReceiptImage(e) {
             const file = e.target.files[0];
@@ -5810,7 +6073,10 @@
         function fillRecentId(id, serverId) {
             document.getElementById('detail-ingame-id').value = id;
             const serverField = document.getElementById('detail-server-id');
-            if (serverField) serverField.value = serverId || '';
+            if (serverField) {
+                serverField.value = serverId || '';
+                if (serverField.tagName === 'SELECT') serverField.classList.toggle('has-value', !!serverField.value);
+            }
             if (window.onPlayerIdFieldChange) window.onPlayerIdFieldChange();
         }
         window.fillRecentId = fillRecentId;
