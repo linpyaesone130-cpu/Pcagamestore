@@ -141,6 +141,16 @@
             --blur: blur(16px) saturate(180%);
             color-scheme: dark;
         }
+        /* Backdrop-filter blur is one of the most GPU-expensive CSS effects,
+           and this app uses it on ~30 elements (header, bottom nav, cards,
+           modals, toggle, tabs...) all driven by the single --blur variable
+           above. blur(16px) is heavy on low-end phones — every element using
+           it forces a GPU compositing pass. Narrow (mobile) viewports get a
+           lighter blur + no saturate boost, which is visually close but far
+           cheaper to render; desktop keeps the original. */
+        @media (max-width: 600px) {
+            :root, html[data-theme="dark"] { --blur: blur(8px); }
+        }
         /* Dark-mode recolors for elements that were designed as light pastel
            tints (badges, focus states, status cards). Without these they show
            up as stray near-white blocks on the dark navy surface. */
@@ -4136,6 +4146,18 @@
             if (pageId === 'leaderboard' && window.loadLeaderboard) window.loadLeaderboard();
             if (pageId === 'voucher' && window.renderVoucherGames) window.renderVoucherGames();
             if (pageId === 'account' && window.renderAccountAccessGate) window.renderAccountAccessGate();
+            // Game Accounts marketplace listener: only alive while on one of
+            // its 3 pages (see listenGameAccounts/stopListenGameAccounts).
+            const ACCOUNT_PAGES = ['account', 'account-list', 'account-detail'];
+            if (ACCOUNT_PAGES.includes(pageId) && window.listenGameAccounts) window.listenGameAccounts();
+            else if (!ACCOUNT_PAGES.includes(pageId) && window.stopListenGameAccounts) window.stopListenGameAccounts();
+            // Coupon availability: only needed while a package/checkout is
+            // being shown on game-detail.
+            if (pageId === 'game-detail' && window.listenCouponAvailability) window.listenCouponAvailability();
+            else if (pageId !== 'game-detail' && window.stopListenCouponAvailability) window.stopListenCouponAvailability();
+            // Wallet top-up history: only needed on the Wallet page.
+            if (pageId === 'wallet' && window.listenWalletTopups) window.listenWalletTopups();
+            else if (pageId !== 'wallet' && window.stopListenWalletTopups) window.stopListenWalletTopups();
         }
 
         let toastHideTimer = null;
@@ -7565,6 +7587,15 @@
         function renderWalletTopupList() {
             const list = document.getElementById('wallet-topup-list');
             const empty = document.getElementById('wallet-topup-empty');
+            if (!walletTopupsLoaded) {
+                // First render before the live snapshot has arrived yet -
+                // neutral loading state, not the "No top up requests" empty
+                // state (which would misleadingly flash before real data).
+                list.innerHTML = '';
+                empty.innerHTML = emptyStateHTML('icon-wallet', 'Loading...', '', '');
+                empty.style.display = 'block';
+                return;
+            }
             if (walletTopupCache.length === 0) {
                 list.innerHTML = '';
                 empty.innerHTML = emptyStateHTML('icon-wallet', 'No top up requests yet', 'Top up your wallet to pay for orders instantly.',
@@ -7623,22 +7654,36 @@
             }
         }
 
-        let walletTopupsListenerAttached = false;
+        // walletTopupCache/renderWalletTopupList only feed the Wallet page's
+        // top-up history list + its detail modal (confirmed via grep — no
+        // other page reads walletTopupCache), so this listener is lazy: only
+        // live while Wallet is open, wired into showPage() below. A
+        // `walletTopupsLoaded` flag lets the first render show a neutral
+        // "loading" state instead of a misleading "No top up requests yet"
+        // empty-state flash before the first snapshot arrives.
+        let walletTopupsUnsub = null;
+        let walletTopupsLoaded = false;
         function listenWalletTopups() {
-            if (walletTopupsListenerAttached) return;
-            walletTopupsListenerAttached = true;
+            if (walletTopupsUnsub) return;
             const gid = window.getGuestId ? window.getGuestId() : null;
             if (!gid) return;
             cleanupOldWalletTopups(gid);
             const q = query(collection(db, "walletTopups"), where("userId", "==", gid));
-            onSnapshot(q, (snap) => {
+            walletTopupsUnsub = onSnapshot(q, (snap) => {
                 const items = [];
                 snap.forEach(d => items.push({ id: d.id, ...d.data() }));
                 items.sort((a, b) => (b.timestamp?.toMillis?.() || 0) - (a.timestamp?.toMillis?.() || 0));
                 walletTopupCache = items;
+                walletTopupsLoaded = true;
                 renderWalletTopupList();
             }, (error) => console.error('Wallet topups listener error:', error));
         }
+        function stopListenWalletTopups() {
+            if (walletTopupsUnsub) { walletTopupsUnsub(); walletTopupsUnsub = null; }
+            walletTopupsLoaded = false;
+        }
+        window.listenWalletTopups = listenWalletTopups;
+        window.stopListenWalletTopups = stopListenWalletTopups;
 
         function openWalletTopupDetail(index) {
             const t = walletTopupCache[index];
@@ -7666,7 +7711,6 @@
         window.formatMMK = window.formatMMK || function (n) { return Math.round(n || 0).toLocaleString('en-US') + ' MMK'; };
 
         listenWalletBalance();
-        listenWalletTopups();
         renderReferralCard();
 
         // ---------- Google sign-in (optional) ----------
@@ -8131,10 +8175,12 @@
         // Populates the mini profile strip's tier chip and the Profile page's
         // VIP card: current tier, lifetime spend, order count, member-since,
         // and a progress bar toward the next tier.
-        async function loadProfileStats() {
-            const guestId = window.getGuestId ? window.getGuestId() : '';
-            if (!guestId) return;
-            const { total, count, games } = await computeUserStats(guestId);
+        // Renders the mini-profile tier chip + Profile page's VIP card from a
+        // {total, count, games} stats object. Split out from loadProfileStats
+        // so the same rendering can run twice: once instantly from a cached
+        // value (see loadProfileStats below), then again once the live
+        // Firestore numbers come back.
+        function renderProfileStatsUI(total, count, games) {
             window.__lastUserStats = { total, count, games };
             const tier = tierForSpend(total);
             const next = nextTierForSpend(total);
@@ -8188,7 +8234,40 @@
                     tierFrame.dataset.tier = tier.name.toLowerCase();
                 }
             }
+        }
 
+        // localStorage cache for the last computed stats, keyed by guest ID
+        // (so switching devices/clearing storage never shows someone else's
+        // numbers). computeUserStats() is 2 real Firestore reads (orders +
+        // walletTopups) that ran on every single app load just to fill in the
+        // mini-profile tier chip - now the cached number renders instantly,
+        // and the live query still runs right after to correct it silently
+        // if anything changed since the cache was written.
+        function getCachedUserStats(guestId) {
+            try {
+                const raw = localStorage.getItem('gz_stats_cache');
+                if (!raw) return null;
+                const cached = JSON.parse(raw);
+                if (!cached || cached.guestId !== guestId) return null;
+                return cached;
+            } catch (e) { return null; }
+        }
+        function setCachedUserStats(guestId, total, count, games) {
+            try {
+                localStorage.setItem('gz_stats_cache', JSON.stringify({ guestId, total, count, games, ts: Date.now() }));
+            } catch (e) {}
+        }
+
+        async function loadProfileStats() {
+            const guestId = window.getGuestId ? window.getGuestId() : '';
+            if (!guestId) return;
+
+            const cached = getCachedUserStats(guestId);
+            if (cached) renderProfileStatsUI(cached.total, cached.count, cached.games);
+
+            const { total, count, games } = await computeUserStats(guestId);
+            renderProfileStatsUI(total, count, games);
+            setCachedUserStats(guestId, total, count, games);
         }
         window.loadProfileStats = loadProfileStats;
 
@@ -8988,6 +9067,9 @@
         // completely outside of any coupon "event window" instead of always
         // being visible with a code box that would just fail to validate.
         // Doesn't reveal codes to the client - only a yes/no availability flag.
+        // Only relevant while a package is selected on the game-detail page
+        // (renderCouponCard, checkout), so this now subscribes on entering
+        // game-detail and unsubscribes on leaving it — see showPage().
         let couponAvailabilityUnsub = null;
         function isCouponCurrentlyUsable(c) {
             if (!c || !c.isActive) return false;
@@ -9019,7 +9101,11 @@
                 refreshPricesAfterCouponChange();
             }, (error) => console.error('Coupon availability listener error:', error));
         }
-        listenCouponAvailability();
+        function stopListenCouponAvailability() {
+            if (couponAvailabilityUnsub) { couponAvailabilityUnsub(); couponAvailabilityUnsub = null; }
+        }
+        window.listenCouponAvailability = listenCouponAvailability;
+        window.stopListenCouponAvailability = stopListenCouponAvailability;
 
         function openFlashSaleGame() {
             if (flashSaleGameId && window.openGameDetail) window.openGameDetail(flashSaleGameId);
@@ -10138,6 +10224,7 @@
         function findCategory(id) { return GAME_CATEGORIES.find(c => c.id === id); }
         let selectedGameCategory = 'all';
         let gameSearchQuery = '';
+        let gameSearchDebounceTimer = null;
 
         function escapeHtml(str) {
             return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -10147,14 +10234,22 @@
         function filterGamesBySearch(value) {
             gameSearchQuery = (value || '').trim().toLowerCase();
             document.getElementById('game-search-clear').style.display = gameSearchQuery ? 'block' : 'none';
-            renderHomeGames();
+            // Debounced: typing fires this on every keystroke, but the actual
+            // re-render (filters + rebuilds the game grid) only runs 250ms
+            // after the user pauses, so fast typing on low-end phones doesn't
+            // trigger a full re-render per character.
+            clearTimeout(gameSearchDebounceTimer);
+            gameSearchDebounceTimer = setTimeout(() => renderHomeGames(), 250);
         }
         window.filterGamesBySearch = filterGamesBySearch;
 
         function clearGameSearch() {
             const input = document.getElementById('game-search-input');
             input.value = '';
-            filterGamesBySearch('');
+            clearTimeout(gameSearchDebounceTimer);
+            gameSearchQuery = '';
+            document.getElementById('game-search-clear').style.display = 'none';
+            renderHomeGames();
             input.focus();
         }
         window.clearGameSearch = clearGameSearch;
@@ -10277,6 +10372,16 @@
             }, { root: null, rootMargin: '0px', threshold: 0.15 })
             : null;
 
+        // Popular Games row perf: rendering every popular-flagged game (and
+        // fetching every card's image) up front was wasted work on phones
+        // that never scroll the row to the end. Render an initial batch,
+        // then load more in batches as the row's end sentinel scrolls into
+        // view (also fed by the auto-scroll loop above, so it works even
+        // without the user touching the row).
+        const POPULAR_INITIAL_BATCH = 8;
+        const POPULAR_LOAD_STEP = 8;
+        let popularLoadMoreObserver = null;
+
         function revealCardsIn(container) {
             if (!container) return;
             const cards = container.querySelectorAll('.game-card-anim:not(.in-view)');
@@ -10344,6 +10449,50 @@
             });
         })();
 
+        function popularGameCardHtml(gr, i) {
+            const g = GAMES[gr.repId];
+            return `
+                <div class="game-card popular-card game-card-anim" style="animation-delay:${Math.min(i * 18, 120)}ms" onclick="openGameEntry(${gr.idx})">
+                    <div class="game-card-img-wrap">
+                        <img src="${g.image}" alt="${g.name}" loading="lazy" decoding="async">
+                        ${categoryBadgeHtml(g.category)}
+                    </div>
+                    <div class="game-card-name">${g.name}</div>
+                </div>
+            `;
+        }
+
+        function renderPopularGamesRow(popularGroups) {
+            const popularScroll = document.getElementById('popular-games-scroll');
+            if (popularLoadMoreObserver) { popularLoadMoreObserver.disconnect(); popularLoadMoreObserver = null; }
+
+            let loaded = Math.min(POPULAR_INITIAL_BATCH, popularGroups.length);
+            const sentinelHtml = loaded < popularGroups.length
+                ? '<div class="popular-games-sentinel" style="flex-shrink:0;width:1px;"></div>' : '';
+            popularScroll.innerHTML = popularGroups.slice(0, loaded).map((gr, i) => popularGameCardHtml(gr, i)).join('') + sentinelHtml;
+            revealCardsIn(popularScroll);
+
+            if (loaded >= popularGroups.length || !('IntersectionObserver' in window)) return;
+
+            popularLoadMoreObserver = new IntersectionObserver((entries) => {
+                if (!entries.some(e => e.isIntersecting)) return;
+                const sentinel = popularScroll.querySelector('.popular-games-sentinel');
+                const nextLoaded = Math.min(loaded + POPULAR_LOAD_STEP, popularGroups.length);
+                const nextHtml = popularGroups.slice(loaded, nextLoaded).map((gr, i) => popularGameCardHtml(gr, loaded + i)).join('');
+                if (sentinel) sentinel.insertAdjacentHTML('beforebegin', nextHtml);
+                revealCardsIn(popularScroll);
+                loaded = nextLoaded;
+                if (loaded >= popularGroups.length) {
+                    popularLoadMoreObserver.disconnect();
+                    popularLoadMoreObserver = null;
+                    if (sentinel) sentinel.remove();
+                }
+            }, { root: popularScroll, rootMargin: '0px 200px 0px 0px', threshold: 0 });
+
+            const sentinelEl = popularScroll.querySelector('.popular-games-sentinel');
+            if (sentinelEl) popularLoadMoreObserver.observe(sentinelEl);
+        }
+
         function renderHomeGames() {
             const popularSection = document.getElementById('popular-games-section');
             const popularScroll = document.getElementById('popular-games-scroll');
@@ -10388,22 +10537,11 @@
             const popularGroups = gameSearchQuery ? [] : indexedGroups.filter(gr => gr.ids.some(id => GAMES[id].popular));
             if (popularGroups.length > 0) {
                 popularSection.style.display = 'block';
-                popularScroll.innerHTML = popularGroups.map((gr, i) => {
-                    const g = GAMES[gr.repId];
-                    return `
-                        <div class="game-card popular-card game-card-anim" style="animation-delay:${Math.min(i * 18, 120)}ms" onclick="openGameEntry(${gr.idx})">
-                            <div class="game-card-img-wrap">
-                                <img src="${g.image}" alt="${g.name}" loading="lazy" decoding="async">
-                                ${categoryBadgeHtml(g.category)}
-                            </div>
-                            <div class="game-card-name">${g.name}</div>
-                        </div>
-                    `;
-                }).join('');
-                revealCardsIn(popularScroll);
+                renderPopularGamesRow(popularGroups);
             } else {
                 popularSection.style.display = 'none';
                 popularScroll.innerHTML = '';
+                if (popularLoadMoreObserver) { popularLoadMoreObserver.disconnect(); popularLoadMoreObserver = null; }
             }
 
             // All Games: filtered by the selected category chip (or everything, for "All"),
@@ -10573,8 +10711,15 @@
             return !!a && (a.status || 'available') === 'available';
         }
 
+        // GAME_ACCOUNTS is only ever read from the three account-marketplace
+        // pages (see the usages below), so unlike the always-on listeners
+        // above, this one subscribes only while the user is actually on one
+        // of those pages and unsubscribes the moment they leave — see the
+        // showPage() calls to listenGameAccounts()/stopListenGameAccounts().
+        let gameAccountsUnsub = null;
         function listenGameAccounts() {
-            onSnapshot(collection(db, "gameAccounts"), (snap) => {
+            if (gameAccountsUnsub) return; // already subscribed
+            gameAccountsUnsub = onSnapshot(collection(db, "gameAccounts"), (snap) => {
                 const map = {};
                 snap.forEach(docSnap => { map[docSnap.id] = docSnap.data(); });
                 GAME_ACCOUNTS = map;
@@ -10585,7 +10730,11 @@
                 console.error("Game accounts listener error:", error);
             });
         }
-        listenGameAccounts();
+        function stopListenGameAccounts() {
+            if (gameAccountsUnsub) { gameAccountsUnsub(); gameAccountsUnsub = null; }
+        }
+        window.listenGameAccounts = listenGameAccounts;
+        window.stopListenGameAccounts = stopListenGameAccounts;
 
         function renderAccountGames() {
             const grid = document.getElementById('account-games-grid');
