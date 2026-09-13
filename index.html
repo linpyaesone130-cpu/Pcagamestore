@@ -28,6 +28,8 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" id="favicon-link">
     <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#060B18">
     <script>
         // Apply saved theme immediately (before CSS paints) to avoid a light-mode flash.
         // Priority: an explicit manual choice (gz_theme) always wins. Otherwise the
@@ -11070,12 +11072,47 @@
         // while this tab/browser is running (foreground, minimized, or another
         // tab) — it can't wake the device if the browser itself is fully closed,
         // since that requires a paid Cloud Messaging + Cloud Function backend.
+        //
+        // When this page is loaded inside the Capacitor Android/iOS shell,
+        // Capacitor auto-injects a global `window.Capacitor` object into the
+        // WebView (no bundler/import needed) exposing native plugins under
+        // `Capacitor.Plugins.*`. We branch on that to use true native FCM
+        // (survives app being swiped away, unaffected by battery optimizers
+        // once the user allows it) instead of the browser web-push path.
+        function isNativeApp() {
+            return !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+        }
         function pushSupported() {
-            return 'Notification' in window;
+            return isNativeApp() || 'Notification' in window;
         }
         function pushEnabled() {
-            try { return pushSupported() && Notification.permission === 'granted' && localStorage.getItem('gz_push_opt_in') === '1'; }
-            catch (e) { return false; }
+            try {
+                if (isNativeApp()) return pushSupported() && localStorage.getItem('gz_push_opt_in') === '1';
+                return pushSupported() && Notification.permission === 'granted' && localStorage.getItem('gz_push_opt_in') === '1';
+            } catch (e) { return false; }
+        }
+        // Wires up the native FCM token listener. Call once on load. Actual
+        // permission is requested later by togglePushNotifications()/
+        // registerFcmToken() — this only sets up where the resulting token
+        // gets saved once the OS hands it back.
+        function initNativePush() {
+            if (!isNativeApp() || !window.Capacitor.Plugins || !window.Capacitor.Plugins.PushNotifications) return;
+            const PN = window.Capacitor.Plugins.PushNotifications;
+            PN.addListener('registration', async (token) => {
+                try {
+                    const gid = window.getGuestId ? window.getGuestId() : null;
+                    if (!gid || !token || !token.value) return;
+                    await setDoc(doc(db, "users", gid), { fcmToken: token.value }, { merge: true });
+                    renderPushToggleUI();
+                } catch (e) { console.error('Native push token save error:', e); }
+            });
+            PN.addListener('registrationError', (err) => {
+                console.error('Native push registration error:', err);
+            });
+            // Re-register silently on every app launch if the user already
+            // opted in previously — the OS won't re-prompt, it just hands the
+            // token back through the same 'registration' listener.
+            if (pushEnabled()) PN.register();
         }
         function renderPushToggleUI() {
             const toggle = document.getElementById('push-toggle');
@@ -11084,6 +11121,17 @@
             if (!pushSupported()) {
                 toggle.classList.add('blocked');
                 stateEl.textContent = 'Not supported on this browser';
+                return;
+            }
+            if (isNativeApp()) {
+                toggle.classList.remove('blocked');
+                if (pushEnabled()) {
+                    toggle.classList.add('on');
+                    stateEl.textContent = 'On — you\'ll get alerts for admin announcements';
+                } else {
+                    toggle.classList.remove('on');
+                    stateEl.textContent = 'Off — tap to enable';
+                }
                 return;
             }
             const perm = Notification.permission;
@@ -11102,10 +11150,19 @@
         }
         async function registerFcmToken() {
             try {
-                await messagingReady;
-                if (!messaging) return;
                 const gid = window.getGuestId ? window.getGuestId() : null;
                 if (!gid) return;
+                if (isNativeApp()) {
+                    // Native path: the token doesn't come back from this call directly —
+                    // it arrives async via the 'registration' listener set up in
+                    // initNativePush(), which is what actually saves it to Firestore.
+                    if (window.Capacitor.Plugins && window.Capacitor.Plugins.PushNotifications) {
+                        window.Capacitor.Plugins.PushNotifications.register();
+                    }
+                    return;
+                }
+                await messagingReady;
+                if (!messaging) return;
                 const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
                 const token = await getToken(messaging, { vapidKey: FCM_VAPID_KEY, serviceWorkerRegistration: registration });
                 if (!token) return;
@@ -11123,6 +11180,26 @@
 
         async function togglePushNotifications() {
             if (!pushSupported()) return;
+            if (isNativeApp()) {
+                if (pushEnabled()) {
+                    try { localStorage.setItem('gz_push_opt_in', '0'); } catch (e) {}
+                    clearFcmToken();
+                    renderPushToggleUI();
+                    return;
+                }
+                try {
+                    const PN = window.Capacitor.Plugins.PushNotifications;
+                    const perm = await PN.requestPermissions();
+                    if (perm && perm.receive === 'granted') {
+                        try { localStorage.setItem('gz_push_opt_in', '1'); } catch (e) {}
+                        registerFcmToken(); // token arrives via the 'registration' listener
+                    } else {
+                        showToast('Notifications permission was not granted', 'error');
+                    }
+                } catch (error) { console.error('Native push permission error:', error); }
+                renderPushToggleUI();
+                return;
+            }
             if (Notification.permission === 'denied') {
                 showToast('Notifications are blocked — enable them in your browser settings', 'error');
                 return;
@@ -11148,6 +11225,11 @@
             renderPushToggleUI();
         }
         window.togglePushNotifications = togglePushNotifications;
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initNativePush);
+        } else {
+            initNativePush();
+        }
         window.renderPushToggleUI = renderPushToggleUI;
 
         messagingReady.then(() => {
