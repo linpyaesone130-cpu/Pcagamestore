@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PCA Store — Game Top-Up & Voucher Store</title>
@@ -303,6 +304,13 @@
             animation: onboard-start-in 0.35s ease;
         }
         .onboarding-start-btn:active { transform: scale(0.97); }
+        .onboarding-guest-btn {
+            display: block; width: 100%; margin-top: 10px; padding: 11px 16px;
+            background: transparent; border: 1px solid var(--border, #ddd); border-radius: 12px;
+            color: var(--text-secondary); font-size: 13.5px; font-weight: 600; line-height: 1.5;
+            cursor: pointer; text-align: center;
+        }
+        .onboarding-guest-btn:active { transform: scale(0.97); background: var(--surface-2, rgba(0,0,0,.04)); }
         @keyframes onboard-start-in {
             from { opacity: 0; transform: translateY(8px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -471,7 +479,7 @@
         .drawer-overlay.show .drawer-nav-item:nth-child(5) { animation-delay: 0.2s; }
         .drawer-overlay.show .drawer-nav-item:nth-child(6) { animation-delay: 0.24s; }
         .drawer-overlay.show .drawer-nav-item:nth-child(7) { animation-delay: 0.28s; }
-        .drawer-overlay.show .drawer-nav-item:nth-child(10) { animation-delay: 0.32s; }
+        .drawer-overlay.show .drawer-nav-item:nth-child(8) { animation-delay: 0.32s; }
         .drawer-overlay.show .drawer-nav-item:nth-child(11) { animation-delay: 0.36s; }
         .drawer-overlay.show .drawer-nav-item:nth-child(12) { animation-delay: 0.4s; }
         .drawer-section-label {
@@ -1500,6 +1508,8 @@
         .payment-option-icon { width: 38px; height: 38px; border-radius: 8px; background: var(--accent); color: var(--on-color); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
         .payment-option-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .payment-option-name { font-size: 14px; font-weight: 500; color: var(--text); }
+        .payment-option-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+        .payment-option-availability { font-size: 11.5px; color: var(--text-secondary); }
         .pm-copy-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
         .pm-copy-btn { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); cursor: pointer; flex-shrink: 0; transition: 0.15s; border: none; }
         .pm-copy-btn:active { background: var(--accent); color: var(--on-color); transform: scale(0.92); }
@@ -1754,6 +1764,8 @@
         .google-login-btn { width: 100%; padding: 11px 12px; border-radius: 10px; font-weight: 500; font-size: 14px; border: 1px solid #DADCE0; background: var(--surface); color: #3C4043; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
         .google-login-btn:disabled { opacity: 0.6; }
         .google-login-btn:active { background: var(--surface-alt); }
+        .gis-fallback { display: none; }
+        .gis-btn-slot { min-height: 40px; }
         .google-account-hint { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 6px; }
         .google-account-signedin { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         .google-account-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: var(--accent-soft); }
@@ -2385,8 +2397,9 @@
 
             <!-- Step 1: Google sign-in -->
             <div class="onboarding-step" id="onboard-step-login" style="display:none;">
-                <p class="onboarding-sub">Sign in with Google to continue.<br>ဆက်လက်ရန် Google ဖြင့် အကောင့်ဝင်ပါ။</p>
-                <button type="button" class="google-login-btn" id="onboard-google-btn" onclick="handleOnboardGoogleSignIn()">
+                <p class="onboarding-sub">Sign in with Google, or continue as a guest.<br>Google ဖြင့် အကောင့်ဝင်ပါ၊ သို့မဟုတ် ဧည့်သည်အဖြစ် ဆက်လက်ကြည့်ရှုနိုင်ပါသည်။</p>
+                <div id="onboard-google-gis" class="gis-btn-slot"></div>
+                <button type="button" class="google-login-btn gis-fallback" id="onboard-google-btn" onclick="handleOnboardGoogleSignIn()">
                     <svg width="18" height="18" viewBox="0 0 48 48">
                         <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.2 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/>
                         <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.2 29.5 4 24 4 16.3 4 9.6 8.3 6.3 14.7z"/>
@@ -2394,6 +2407,9 @@
                         <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.1 5.6l6.2 5.2C40.9 36.2 44 30.6 44 24c0-1.3-.1-2.7-.4-3.5z"/>
                     </svg>
                     <span id="onboard-google-btn-label">Continue with Google</span>
+                </button>
+                <button type="button" class="onboarding-guest-btn" id="onboard-guest-btn" onclick="handleOnboardGuestContinue()">
+                    Continue as Guest<br><span style="font-size:11.5px;opacity:.75;">ဧည့်သည်အဖြစ် ဆက်လက်ရန်</span>
                 </button>
             </div>
 
@@ -2650,6 +2666,9 @@
                 <div class="drawer-nav-item" data-page="profile" onclick="drawerNavigate('profile')">
                     <svg class="ui-icon"><use href="#icon-user"></use></svg><span data-i18n="nav_profile">Profile</span>
                 </div>
+                <div class="drawer-nav-item" onclick="closeDrawer(); openSupportWidget();">
+                    <svg class="ui-icon"><use href="#icon-message-circle"></use></svg><span data-i18n="nav_support">Support</span>
+                </div>
 
                 <div class="drawer-divider"></div>
                 <div class="drawer-section-label">More</div>
@@ -2659,9 +2678,6 @@
                 </div>
                 <div class="drawer-nav-item" onclick="closeDrawer(); showPage('terms');">
                     <svg class="ui-icon"><use href="#icon-book"></use></svg><span data-i18n="nav_terms">Terms &amp; Policy</span>
-                </div>
-                <div class="drawer-nav-item" onclick="closeDrawer(); openSupportWidget();">
-                    <svg class="ui-icon"><use href="#icon-message-circle"></use></svg><span data-i18n="nav_support">Support</span>
                 </div>
             </nav>
             <div class="drawer-footer" data-i18n="drawer_footer">PCA Store</div>
@@ -2780,7 +2796,8 @@
                     <div class="empty-state-sub" data-i18n="empty_signin_sub">Game accounts are high value, so please sign in with Google first.</div>
                     <div class="empty-state-action">
                         <div class="google-account-card" style="margin:0 auto;max-width:320px;">
-                            <button type="button" class="google-login-btn" id="account-google-signin-btn" onclick="handleGoogleSignIn('account-google-signin-btn')">
+                            <div id="account-google-signin-gis" class="gis-btn-slot" style="display:flex;justify-content:center;"></div>
+                            <button type="button" class="google-login-btn gis-fallback" id="account-google-signin-btn" onclick="handleGoogleSignIn('account-google-signin-btn')">
                                 <svg width="18" height="18" viewBox="0 0 48 48">
                                     <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.2 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/>
                                     <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.2 29.5 4 24 4 16.3 4 9.6 8.3 6.3 14.7z"/>
@@ -2975,6 +2992,34 @@
             </h3>
             <div id="wallet-topup-list"></div>
             <div id="wallet-topup-empty" style="display:none;"></div>
+        </div>
+
+        <!-- WALLET GOOGLE SIGN-IN GATE: shown instead of the top-up modal when
+             the customer isn't signed in with Google yet. Wallet top-ups are
+             the one flow that needs a real account (so balance/history can
+             follow the customer across devices), unlike browsing/ordering
+             which work on the guest ID alone. -->
+        <div class="modal-overlay" id="wallet-google-gate-overlay" onclick="if(event.target===this) closeWalletGoogleGate()">
+            <div class="modal-box" style="max-width:340px;text-align:center;padding:26px 22px;position:relative;">
+                <div class="modal-close" onclick="closeWalletGoogleGate()" style="position:absolute;top:14px;right:14px;">
+                    <svg class="ui-icon" style="width:18px;height:18px;"><use href="#icon-close"></use></svg>
+                </div>
+                <div style="font-size:15px;font-weight:700;margin-bottom:8px;">Sign in to use Wallet</div>
+                <p style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin:0 0 18px;">
+                    Wallet ကို အသုံးပြုရန် Google account ဖြင့် အကောင့်ဝင်ရန် လိုအပ်ပါသည်။<br>
+                    A Google sign-in keeps your Wallet balance and top-up history safe across devices.
+                </p>
+                <div id="wallet-gate-google-gis" class="gis-btn-slot" style="display:flex;justify-content:center;"></div>
+                <button type="button" class="google-login-btn gis-fallback" id="wallet-gate-google-btn" onclick="handleWalletGateGoogleSignIn()" style="width:100%;justify-content:center;">
+                    <svg width="18" height="18" viewBox="0 0 48 48">
+                        <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.2 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/>
+                        <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.2 29.5 4 24 4 16.3 4 9.6 8.3 6.3 14.7z"/>
+                        <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/>
+                        <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.1 5.6l6.2 5.2C40.9 36.2 44 30.6 44 24c0-1.3-.1-2.7-.4-3.5z"/>
+                    </svg>
+                    <span id="wallet-gate-google-btn-label">Continue with Google</span>
+                </button>
+            </div>
         </div>
 
         <!-- WALLET TOP UP MODAL: amount + payment method + receipt upload -->
@@ -3347,7 +3392,8 @@
                 </div>
                 <div class="collapsible-body" id="account-body">
                     <div class="google-account-card" id="google-account-signedout">
-                        <button type="button" class="google-login-btn" id="google-signin-btn" onclick="handleGoogleSignIn()">
+                        <div id="google-signin-gis" class="gis-btn-slot" style="display:flex;justify-content:center;"></div>
+                        <button type="button" class="google-login-btn gis-fallback" id="google-signin-btn" onclick="handleGoogleSignIn()">
                             <svg width="18" height="18" viewBox="0 0 48 48">
                                 <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.2 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/>
                                 <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.2 29.5 4 24 4 16.3 4 9.6 8.3 6.3 14.7z"/>
@@ -5616,12 +5662,12 @@
             const bal = currentWalletBalance;
             const enough = bal >= price;
             box.innerHTML = enough ? `
-                <span class="wallet-pay-balance-label">Wallet Balance</span>
+                <span class="wallet-pay-balance-label">Wallet Balance <span class="payment-option-availability" style="font-weight:400;">- Available 24/7</span></span>
                 <span class="wallet-pay-balance-amount">${bal.toLocaleString()} MMK</span>
                 ${discountLine}
                 <span class="wallet-pay-note ok">✓ Enough balance — ${price.toLocaleString()} MMK will be deducted when you confirm.</span>
             ` : `
-                <span class="wallet-pay-balance-label">Wallet Balance</span>
+                <span class="wallet-pay-balance-label">Wallet Balance <span class="payment-option-availability" style="font-weight:400;">- Available 24/7</span></span>
                 <span class="wallet-pay-balance-amount">${bal.toLocaleString()} MMK</span>
                 ${discountLine}
                 <span class="wallet-pay-note low">Not enough balance — top up ${(price - bal).toLocaleString()} MMK more to pay from your wallet.</span>
@@ -5667,7 +5713,10 @@
                 return `
                     <div class="payment-option" data-payment-id="${id}" onclick="selectPaymentMethod('${id}')">
                         <div class="payment-option-icon">${p.image ? `<img src="${p.image}" alt="${p.name}">` : '<svg class="ui-icon" style="width:20px;"><use href="#icon-wallet"></use></svg>'}</div>
-                        <span class="payment-option-name">${p.name}</span>
+                        <div class="payment-option-text">
+                            <span class="payment-option-name">${p.name}</span>
+                            ${p.availabilityNote ? `<span class="payment-option-availability">${p.availabilityNote}</span>` : ''}
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -6507,7 +6556,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, doc, getDoc, setDoc, updateDoc, deleteDoc, writeBatch, serverTimestamp, query, where, orderBy, limit, getDocs, getCountFromServer, onSnapshot, increment, runTransaction, arrayUnion, arrayRemove, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, signInWithCredential, getRedirectResult, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getMessaging, getToken, onMessage, isSupported as isMessagingSupported } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
         const firebaseConfig = {
@@ -6952,7 +7001,36 @@
         window.redeemReferralCode = redeemReferralCode;
 
         // ---------- Top Up Modal ----------
+        // Wallet requires a real Google sign-in (balance/history need to follow
+        // the customer across devices, unlike guest-ID-only browsing/orders).
+        // Signed-out taps show the gate modal instead; walletGatePending tracks
+        // that we should auto-open the real top-up modal once sign-in succeeds.
+        let walletGatePending = false;
+
         function openWalletTopupModal() {
+            if (!auth.currentUser) {
+                walletGatePending = true;
+                document.getElementById('wallet-google-gate-overlay').classList.add('show');
+                return;
+            }
+            openWalletTopupModalActual();
+        }
+        window.openWalletTopupModal = openWalletTopupModal;
+
+        function closeWalletGoogleGate() {
+            walletGatePending = false;
+            document.getElementById('wallet-google-gate-overlay').classList.remove('show');
+        }
+        window.closeWalletGoogleGate = closeWalletGoogleGate;
+
+        async function handleWalletGateGoogleSignIn() {
+            await handleGoogleSignIn('wallet-gate-google-btn');
+            // If sign-in succeeded, onAuthStateChanged below closes this gate
+            // and opens the real Wallet top-up modal automatically.
+        }
+        window.handleWalletGateGoogleSignIn = handleWalletGateGoogleSignIn;
+
+        function openWalletTopupModalActual() {
             document.getElementById('wallet-topup-amount').value = '';
             document.getElementById('wallet-topup-payment-info').style.display = 'none';
             document.getElementById('wallet-receipt-preview').style.display = 'none';
@@ -6970,7 +7048,6 @@
             renderWalletPaymentMethods();
             document.getElementById('wallet-topup-overlay').classList.add('show');
         }
-        window.openWalletTopupModal = openWalletTopupModal;
 
         function closeWalletTopupModal() {
             document.getElementById('wallet-topup-overlay').classList.remove('show');
@@ -7039,7 +7116,10 @@
             const cryptoCard = PROVIDER_ENABLED.fazercard === false ? '' : `
                 <div class="payment-option" data-wallet-payment-id="__crypto__" onclick="openCryptoTopupModal()">
                     <div class="payment-option-icon"><svg class="ui-icon" style="width:20px;"><use href="#icon-wallet"></use></svg></div>
-                    <span class="payment-option-name">Pay with Crypto (auto top-up)</span>
+                    <div class="payment-option-text">
+                        <span class="payment-option-name">Pay with Crypto (auto top-up)</span>
+                        <span class="payment-option-availability">Instant - available 24/7</span>
+                    </div>
                 </div>
             `;
             // Independent from the FazerCards crypto card above - its own
@@ -7048,7 +7128,10 @@
             const aluuCard = PROVIDER_ENABLED.aluu === false ? '' : `
                 <div class="payment-option" data-wallet-payment-id="__aluu_usdt__" onclick="openAluuTopupModal()">
                     <div class="payment-option-icon"><svg class="ui-icon" style="width:20px;"><use href="#icon-wallet"></use></svg></div>
-                    <span class="payment-option-name">Pay with USDT (Aluu.in, auto top-up)</span>
+                    <div class="payment-option-text">
+                        <span class="payment-option-name">Pay with USDT (Aluu.in, auto top-up)</span>
+                        <span class="payment-option-availability">Instant - available 24/7</span>
+                    </div>
                 </div>
             `;
             if (ids.length === 0) {
@@ -7060,7 +7143,10 @@
                 return `
                     <div class="payment-option" data-wallet-payment-id="${id}" onclick="selectWalletPaymentMethod('${id}')">
                         <div class="payment-option-icon">${p.image ? `<img src="${p.image}" alt="${p.name}">` : '<svg class="ui-icon" style="width:20px;"><use href="#icon-wallet"></use></svg>'}</div>
-                        <span class="payment-option-name">${p.name}</span>
+                        <div class="payment-option-text">
+                            <span class="payment-option-name">${p.name}</span>
+                            ${p.availabilityNote ? `<span class="payment-option-availability">${p.availabilityNote}</span>` : ''}
+                        </div>
                     </div>
                 `;
             }).join('') + cryptoCard + aluuCard;
@@ -7592,6 +7678,57 @@
         const googleProvider = new GoogleAuthProvider();
         googleProvider.setCustomParameters({ prompt: 'select_account' });
 
+        // ---------- Google Identity Services (GIS) sign-in ----------
+        // Renders Google's own "Sign in with Google" button, which opens an
+        // in-page account chooser overlay instead of a separate popup/tab
+        // (signInWithPopup opens as a full new tab on most mobile browsers,
+        // since they don't support classic small popup windows). Falls back
+        // to the old popup/redirect buttons (class .gis-fallback, hidden by
+        // default) if the GIS script is blocked/fails to load - e.g. some
+        // ad/tracker blockers block accounts.google.com/gsi/client.
+        const GIS_CLIENT_ID = '666629360027-us8un4uogmeb24mgb9jt6ljsbp3r25k4.apps.googleusercontent.com';
+        const GIS_BUTTON_SLOT_IDS = ['onboard-google-gis', 'account-google-signin-gis', 'wallet-gate-google-gis', 'google-signin-gis'];
+
+        async function handleGisCredentialResponse(response) {
+            try {
+                const credential = GoogleAuthProvider.credential(response.credential);
+                const result = await signInWithCredential(auth, credential);
+                applyGoogleProfile(result.user);
+            } catch (error) {
+                console.error('GIS sign-in error:', error);
+                if (window.showToast) window.showToast('Google sign-in failed. Please try again.', 'fail');
+            }
+        }
+        window.handleGisCredentialResponse = handleGisCredentialResponse;
+
+        function initGisSignIn() {
+            if (!(window.google && google.accounts && google.accounts.id)) return false;
+            google.accounts.id.initialize({
+                client_id: GIS_CLIENT_ID,
+                callback: handleGisCredentialResponse,
+                auto_select: false
+            });
+            GIS_BUTTON_SLOT_IDS.forEach((id) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                google.accounts.id.renderButton(el, { theme: 'outline', size: 'large', shape: 'pill', text: 'continue_with', logo_alignment: 'left' });
+            });
+            return true;
+        }
+
+        // Give the GIS script (loaded async in <head>) a moment to arrive;
+        // if it hasn't after 2s (blocked, offline, etc.), reveal the old
+        // popup/redirect buttons instead so sign-in still works.
+        (function waitForGis(attemptsLeft) {
+            if (initGisSignIn()) return;
+            if (attemptsLeft <= 0) {
+                document.querySelectorAll('.gis-fallback').forEach((el) => { el.style.display = ''; });
+                document.querySelectorAll('.gis-btn-slot').forEach((el) => { el.style.display = 'none'; });
+                return;
+            }
+            setTimeout(() => waitForGis(attemptsLeft - 1), 200);
+        })(10);
+
         function renderGoogleAccountUI(user) {
             const signedOutEl = document.getElementById('google-account-signedout');
             const signedInEl = document.getElementById('google-account-signedin');
@@ -7726,6 +7863,16 @@
         }
         window.handleOnboardGoogleSignIn = handleOnboardGoogleSignIn;
 
+        // Guest browsing: the store already runs fully on the localStorage
+        // guestId (see getGuestId()) for browsing, orders, and wallet - Google
+        // sign-in is only needed for cross-device profile sync and the
+        // account marketplace gate. So skipping straight to language choice
+        // here is safe and doesn't block any core purchase flow.
+        function handleOnboardGuestContinue() {
+            showOnboardStep('lang');
+        }
+        window.handleOnboardGuestContinue = handleOnboardGuestContinue;
+
         function selectOnboardLanguage(lang) {
             setLanguage(lang);
             const enChip = document.getElementById('onboard-lang-en');
@@ -7754,6 +7901,11 @@
             renderGoogleAccountUI(user);
             if (window.renderAccountAccessGate) window.renderAccountAccessGate();
             handleOnboardAuthState(user);
+            if (user && walletGatePending) {
+                walletGatePending = false;
+                document.getElementById('wallet-google-gate-overlay').classList.remove('show');
+                openWalletTopupModalActual();
+            }
         });
 
         // ---------- Account marketplace access gate ----------
@@ -8275,12 +8427,8 @@
                 text.innerText = t('chat_admin_online');
                 chatStatusStr = 'Online';
             } else {
-                const lastSeenDate = new Date(lastAdminActiveMs);
-                const isToday = lastSeenDate.toDateString() === new Date().toDateString();
-                const timeStr = lastSeenDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-                const lastSeenStr = isToday ? timeStr : `${lastSeenDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })} ${timeStr}`;
-                text.innerText = `Admin Offline — last seen ${lastSeenStr}`;
-                chatStatusStr = `Last seen ${lastSeenStr}`;
+                text.innerText = 'Last seen recently';
+                chatStatusStr = 'Last seen recently';
             }
             if (chatDot) chatDot.classList.toggle('online', isOnline);
             if (chatText) chatText.innerText = chatStatusStr;
@@ -10840,7 +10988,10 @@
                 return `
                     <div class="payment-option" data-payment-id="${id}" onclick="acctSelectPaymentMethod('${id}')">
                         <div class="payment-option-icon">${p.image ? `<img src="${p.image}" alt="${p.name}">` : '<svg class="ui-icon" style="width:20px;"><use href="#icon-wallet"></use></svg>'}</div>
-                        <span class="payment-option-name">${p.name}</span>
+                        <div class="payment-option-text">
+                            <span class="payment-option-name">${p.name}</span>
+                            ${p.availabilityNote ? `<span class="payment-option-availability">${p.availabilityNote}</span>` : ''}
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -11230,6 +11381,40 @@
         } else {
             initNativePush();
         }
+
+        // ---------- PWA installability + custom "Download App" button ----------
+        // Chrome only offers to install a site as an app (WebAPK) if a service
+        // worker is registered — previously that only happened inside
+        // registerFcmToken(), i.e. only after a visitor turned push
+        // notifications on. Registering it here unconditionally means every
+        // visitor's browser sees this as an installable app from their first
+        // visit, and — once actually installed — notifications show up under
+        // the app's own name/icon instead of "Chrome • pcagamestore.vercel.app".
+        if (!isNativeApp() && 'serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/firebase-messaging-sw.js')
+                .catch(err => console.error('Service worker registration error:', err));
+        }
+
+        let deferredInstallPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault(); // stop Chrome's default mini-infobar; we show our own button instead
+            deferredInstallPrompt = e;
+            const btn = document.getElementById('install-app-btn');
+            if (btn) btn.style.display = 'flex';
+        });
+        async function installApp() {
+            if (!deferredInstallPrompt) return;
+            deferredInstallPrompt.prompt();
+            await deferredInstallPrompt.userChoice; // resolves once the user taps Install or Cancel
+            deferredInstallPrompt = null;
+            const btn = document.getElementById('install-app-btn');
+            if (btn) btn.style.display = 'none';
+        }
+        window.installApp = installApp;
+        window.addEventListener('appinstalled', () => {
+            const btn = document.getElementById('install-app-btn');
+            if (btn) btn.style.display = 'none';
+        });
         window.renderPushToggleUI = renderPushToggleUI;
 
         messagingReady.then(() => {
@@ -12196,5 +12381,12 @@
         initPackageCardLongPressCopy();
         applyI18n();
     </script>
+    <!-- Shown only when Chrome fires 'beforeinstallprompt' (site meets PWA
+         install criteria: manifest + registered service worker over HTTPS).
+         Lets a visitor install straight from the website itself, no Play
+         Store needed. Hidden by default; JS toggles it visible. -->
+    <button id="install-app-btn" onclick="installApp()" style="display:none;position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom, 0px));z-index:9999;padding:13px 16px;border:none;border-radius:14px;background:#2563EB;color:#fff;font-size:15px;font-weight:700;box-shadow:0 8px 24px rgba(37,99,235,0.35);align-items:center;justify-content:center;gap:8px;">
+        ⬇️ App ကို Download လုပ်ပါ
+    </button>
 </body>
 </html>
